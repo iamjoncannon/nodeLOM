@@ -7,20 +7,23 @@ The target use case is a local web application that allows multiple users to man
 
 ## Installation:
 
-
 1. git clone https://github.com/iamjoncannon/maxLOM
 
-2. place LOMcontroller.amxd into Live Session (any track will work)
+2. Place LOMcontroller.amxd into Live Session (any track will work)
 
-Expose the API to your Node application:
+3. Press 'script start' button in the Max device. This will spin up the socket.io server locally on port 8080.
+
+4. Expose the API to your Node application:
 
 ```
 const LOM = require("./maxLOM/LOM.js")
+
+LOM.connect()
 ```
 
 ## Usage:
-##  
-Also includes a bunch of handler functions since the Live API is kind of wonky. Mostly self explanatory:
+
+Also includes a bunch of handler methods since the Live API is kind of wonky. Mostly self explanatory:
 
 #### Global:
 
@@ -52,9 +55,23 @@ LOM.track(1).send(1).set(0) // 0 to 1
 
 ```
 
+#### Get requests
+
+
+```
+```
+
+#### LOM.observe
+
+Continuously stream value changes.
+
+```
+
+```
+
 #### Roll Your Own 
 
-See LOMstructure.txt for discussion of the API
+(See LOMstructure.txt for discussion of the API)
 
 ```
 LOM.call(path, command) // LOM.call("live_set", "stop_playing")
