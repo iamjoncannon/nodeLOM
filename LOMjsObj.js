@@ -8,7 +8,9 @@ outlets = 2;
 
 //post(LiveAPI("live_set tracks 1 devices 0 parameters 8").set('value', 100)) // parameters 1-8 change the macro values
 
-post(LiveAPI("live_set tracks 2 clip_slots 0 clip").info) // parameters 1-8 change the macro values
+// post(LiveAPI("live_set tracks 2 clip_slots 0 clip").info) // parameters 1-8 change the macro values
+
+// post(LiveAPI("live_set tracks 2").getcount('devices'))
 
 
 // call and set 

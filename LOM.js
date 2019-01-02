@@ -53,6 +53,20 @@ const LOM = {
     this.outlet(['get', path, prop]);
   },
 
+  count: function(prop, cb, path) {
+
+    if(path){
+      this.getList[path+prop] = cb;
+
+      this.outlet(['count', path, prop]);
+    }
+    else{
+      this.getList[this.path+prop] = cb;
+
+      this.outlet(['count', this.path, prop]);
+    }
+  },
+
   observe: function(obs, path, prop, cb){
 
     this.observeList[path+prop] = cb;
@@ -91,7 +105,6 @@ const LOM = {
   get: function(value, cb){
     LOM.Get(this.path, value, cb)
   },
-
 
 };
 
@@ -170,14 +183,13 @@ LOM.track = function(num) {
 
     on() {
       trackPath += ' parameters 0 ' 
-      console.log(trackPath)
+
       LOM.Set(trackPath, 'value', 1)
 
     },
 
     off() {
       trackPath += ' parameters 0 ' 
-      console.log(trackPath)
 
       LOM.Set(trackPath, 'value', 0)
     },
@@ -192,13 +204,18 @@ LOM.track = function(num) {
     },
 
     get(value, cb){
-      console.log(trackPath)
+      // console.log(trackPath)
       if(trackPath.includes("clip_slots")){
         trackPath += " clip "
       }
       
       LOM.Get(trackPath, value, cb)
     },
+
+    count(value, cb){
+      console.log(trackPath, value)
+      LOM.Get(trackPath, value, cb)
+    }
 
   };
 
@@ -232,7 +249,7 @@ LOM.connect = function(){
 
     socket.on('fromServer', function(data){
 
-      console.log(data.message)
+      // console.log(data.message)
 
       if (data.type == 'id'){
 
@@ -243,6 +260,7 @@ LOM.connect = function(){
       // here we handle data returned from Live 
 
       if (data.type === 'got'){
+              // console.log(data)
 
         LOM.getList[data.path + data.prop](data.value) // calling the callback with the value returned from Live
 
@@ -264,13 +282,10 @@ LOM.connect = function(){
 
 };
 
-LOM.init = function(){
-
-    //initalize an object that returns the global observe methods as an object
-
-};
 
 LOM.scrape = function(){
+
+    
 
     // initiate a cascade of get calls 
     // for the total state of the set
@@ -278,46 +293,19 @@ LOM.scrape = function(){
 
 },
 
+
+LOM.init = function(){
+
+    //initalize an object that returns the global observe methods as an object
+
+};
+
+
 module.exports = LOM;
 
 
 
 // TO DO \\
-
-
-
-// SECOND // finalize the functions for
-// the get methods- 
-
-// figure out how to get the name of a track clip
-// LOM.Get("live_set tracks 2 clip_slots 0 clip", "name", (x)=>console.log(x))
-
-
-// figure out how to get the number of devices in a track
-
-
-// LiveAPI("live_set tracks 0 clip_slots 0").get("name")
-
-// LOM.track(1).clip(4).get("name," (name) => console.log(name)) // "04 Goodbye World!"
-
-
-
-// Counting \\
-
-// LiveAPI("live_set").getcount("tracks")
-
-// LOM.count(property, callback) // properties: 'tracks', 'clips', 'scenes' // LiveAPI("live_set").getcount('tracks')
-
-// LOM.tracks.count()
-// LOM.scenes.count()
-
-
-
-
-
-
-
-
 
 
 // THIRD- put the get methods together into one big get request

@@ -56,8 +56,8 @@ LOM.track(1).send(1).set(0) // 0 to 1
 
 #### Device
 ```Javascript
-LOM.track(1).dev(0).off() // disables device
-LOM.tracks(2).dev(0).on() // enables device
+LOM.track(1).dev(0).off() 
+LOM.tracks(2).dev(0).on() 
 LOM.track(1).dev(0).knob(1).set(127) // 1-127 (NB: not 0 indexed)
 ```
 
