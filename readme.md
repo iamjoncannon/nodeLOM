@@ -69,6 +69,9 @@ LOM.tracks(1).clip(0).get("name", (x)=>console.log(x)) // "Hello Mars entrance s
 LOM.get("tempo", (x)=>console.log(x)) // "120" 
 LOM.track(1).dev(0).knob(1).get("name", (name) => console.log(name)) // "my funky knob"
 
+LOM.count("tracks", (tracks)=>console.log(tracks)) // "15"
+LOM.count("scenes", (scenes)=>console.log(scenes)) // "8"
+
 ```
 
 Return a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names

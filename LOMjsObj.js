@@ -49,6 +49,16 @@ function get(path, prop){
 
 }
 
+// count
+
+function count(path, prop){
+
+	outlet(0, path, prop)
+
+	outlet(1, 'got', path, prop, LiveAPI(path).getcount(prop))
+
+}
+
 
 // observer 
 
