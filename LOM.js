@@ -28,8 +28,6 @@ const LOM = {
                     // will stream as long as the socket is connected and the 
                     // observe value is assigned in the LOM interface 
 
-  scrapeObject : {}, // stores the scrape data
-
   // these are global methods
 
   outlet: function(data){ 
@@ -71,7 +69,7 @@ const LOM = {
 
     this.observeList[path+prop] = cb;
 
-    this.outlet(['obsSet', obs, path, prop]); // need to configure this i think
+    this.outlet(['obsSet', obs, path, prop]); 
 
   },
 
@@ -243,11 +241,11 @@ LOM.connect = function(){
 
     const io = require('socket.io-client');
 
-    socket = io.connect('http://localhost:8080');
+    socket = io.connect('http://localhost:8080'); 
 
     // we can assign the listeners for data from the Max node server here
 
-    socket.on('fromServer', function(data){
+    socket.on('fromServer', function(data){ 
 
       // console.log(data.message)
 
@@ -285,10 +283,8 @@ LOM.connect = function(){
 
 LOM.scrape = function(){
 
-  // cascade async get requests from the API
-  // create a two dimensional array with track info and clips
+  let cache = {};
 
-  let cache = {}
   function trackCountPromise(){
     return new Promise(resolve=>{
       LOM.count('tracks', (x)=>{resolve(x)})
@@ -298,7 +294,7 @@ LOM.scrape = function(){
   function trackNameGetPromise(num){
     return new Promise(resolve=>{
 
-      LOM.track(num).get('name', (x)=>resolve( cache[num] = {name: x, clips: [], deviceParams: []} )) // object solution
+      LOM.track(num).get('name', (x)=>resolve( cache[num] = {name: x, clips: [], deviceParams: []} ))
 
     })
   }
@@ -329,7 +325,6 @@ LOM.scrape = function(){
   function clipNameGetPromise(inputArr, trackNum, clipNum){
       return new Promise(resolve=>{
 
-        // console.log(inputArr)
         LOM.track(trackNum).clip(clipNum).get('name', (x)=>resolve(inputArr[clipNum] = x))
       
       })
@@ -338,14 +333,13 @@ LOM.scrape = function(){
   function deviceParamsGetPromise(inputArr, trackNum, devNum){
       return new Promise(resolve=>{
 
-        // console.log(inputArr)
         LOM.track(trackNum).dev(0).knob(devNum).get('name', (x)=>resolve(inputArr[devNum] = x))
       
       })
   }
 
   async function asyncSceneScrape(trackArray, scenesNum){
-    // console.log(Object.keys(trackArray))
+
     let scenes = [];
 
     let devices = [1,2,3,4,5,6]
@@ -353,8 +347,6 @@ LOM.scrape = function(){
     for(let i =0; i < scenesNum; i++){
       scenes.push(i)
     }
-
-    // console.log(scenes)
 
     for (let j of Object.keys(trackArray)){
 
@@ -384,7 +376,6 @@ LOM.scrape = function(){
     let trackList = await asyncTrackScrape(trackCount);
     let finalArray = await asyncSceneScrape(trackList, sceneCount)
 
-    // return {track_count: trackCount, scene_count: sceneCount, track_details: finalArray}
     return finalArray 
 
   }
@@ -403,39 +394,7 @@ LOM.init = function(){
 
 module.exports = LOM;
 
-
-
 // TO DO \\
-
-
-// THIRD- put the get methods together into one big get request
-
-// LOM.scrape() 
-
-/* 
-
-returns an object representing the whole set
-  - number of tracks
-  - track names 
-  - number of scenes
-  - track info
-    - device parameter names
-    - clip names
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Fourth

@@ -1,13 +1,13 @@
 
-# maxLOM- Live API <-> socket.io 
+# nodeLOM- Live API <-> socket.io 
 
 Leverages the recently added Node.js object in Max For Live to update a previous npm package - "max4node" https://www.npmjs.com/package/max4node - using socket.io instead of the Max UDP object to communicate with an external server.
 
-The target use case is a local web application that allows multiple users to manipulate an Abelton Live session. 
+The target use case is a local web application that allows multiple users to manipulate a Live session. 
 
 ## Installation:
 
-1. git clone https://github.com/iamjoncannon/maxLOM
+1. git clone https://github.com/iamjoncannon/nodeLOM
 
 2. install dependencies into subdirectory:
 
@@ -22,7 +22,7 @@ npm i socket.io
 5. Expose the API:
 
 ```Javascript
-const LOM = require("./maxLOM/LOM.js") // or ("./../maxLOM/LOM.js")
+const LOM = require("./maxLOM/LOM.js") // or ("./../nodeLOM/LOM.js")
 
 LOM.connect()
 ```
