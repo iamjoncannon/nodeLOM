@@ -1,5 +1,5 @@
 
-# maxLOM- Live API -> socket.io 
+# maxLOM- Live API <-> socket.io 
 
 Leverages the recently added Node.js object in Max For Live to update a previous npm package - "max4node" https://www.npmjs.com/package/max4node - using the socket.io library instead of the Max UDP object to communicate with an external server.
 
@@ -13,7 +13,7 @@ The target use case is a local web application that allows multiple users to man
 
 3. Press 'script start' button in the Max device. This will spin up the socket.io server locally on port 8080.
 
-4. Expose the API to your Node application:
+4. Expose the API:
 
 ```
 const LOM = require("./maxLOM/LOM.js")
@@ -22,8 +22,6 @@ LOM.connect()
 ```
 
 ## Usage:
-
-Also includes a bunch of handler methods since the Live API is kind of wonky. Mostly self explanatory:
 
 #### Global:
 
@@ -59,6 +57,7 @@ LOM.track(1).send(1).set(0) // 0 to 1
 
 
 ```
+
 ```
 
 #### LOM.observe

@@ -9,12 +9,12 @@ termIn.setEncoding('utf-8');
 
 termIn.on('data', function(data){
 
-	if (data === 'play\n'){
+	if (data === 'play\n'){ // Bash "play" 
 
 		LOM.play()
 	}
 
-	if (data === 'stop\n'){
+	if (data === 'stop\n'){ // Bash "stop"
 
 		LOM.stop()
 	}

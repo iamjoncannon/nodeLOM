@@ -20,9 +20,12 @@ let LOM = {
 
   path: 'live_set',
 
-  getList : {},
+  getList : {}, // basically a bootleg form of Promises-
+                // stores get request callbacks to return once the value is returned from Abe
 
-  observeList : {},
+  observeList : {}, // same as getList but not deleted after the value is returned
+                    // will stream as long as the socket is connected and the 
+                    // observe value is assigned in the LOM interface 
 
   outlet: function(data){
 
@@ -55,7 +58,7 @@ let LOM = {
   },
 
   play: function() {
-    console.log('bang')
+    // console.log('bang')
     this.call(this.path, 'start_playing');
   },
 
@@ -179,7 +182,7 @@ LOM.connect = function(){
 
     socket.on('fromServer', function(data){
 
-      // console.log(data)
+      console.log(data.message)
 
       if (data.type == 'id'){
 
@@ -213,45 +216,50 @@ LOM.connect = function(){
 
 module.exports = LOM;
 
-// LOM.connect();
-
-// let termIn = process.stdin;
-// termIn.setEncoding('utf-8');
-// termIn.on('data', function(data){
-//   if (data === 'play\n'){LOM.play()}
-//   if (data === 'stop\n'){LOM.stop()}
-//   if (data === 'test\n'){
 
 
+// TO DO \\
 
-//     // LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
+// FIRST \\
+// last of the set methods \\
+
+// the devices- write the handler functions then update the readme with the sugar
+
+// LOM.track(1).dev(1).knob(4).set(value) // LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
+// LOM.track(1).dev(3).off()
+// LOM.tracks(2).dev(4).on()
+
+// LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
+
+
+// SECOND // finalize the functions for
+// the get methods- 
+// figure out how to get the name of a track clip
+// figure out how to 
+
+// LOM.track(1).clip(4).get("name," (name) => console.log(name)) // "04 The Goodbye World"
+// LOM.count(property, callback) // properties: 'tracks', 'clips', 'scenes' // LiveAPI("live_set").getcount('tracks')
+// LOM.tracks.count()
+// LOM.scenes.count()
+
+
+// THIRD- put the get methods together into one big final
+
+// LOM.scrape() 
+// returns an object representing the whole set- number of tracks, track names, number of scenes, track info- 
+
+
+// LiveAPI("live_set tracks 0 clip_slots 0").get("name")
+
+
+// LAST BUT NOT LEAST
+
+// observe method-
+
+// LOM.track(1).observe("is playing", ( )=> console.log("Track 1 is Playing")).
 
 
 
-//   }
-// })
-
-
-// Global controls:
-
-// LOM.play()
-// LOM.stop()
-// LOM.resume() 
-// LOM.tempo.set(120)
-// LOM.bquant.set(4)  // 0 = none, 1 = 8 bars, 2 = 4 bars, 3 = 2 bars, 4 = 1 bar
-// LOM.scene(2).fire()
-
-// Track Controls 
-
-// LOM.track(0).clip(0).fire()
-// LOM.track(2).stop()
-// LOM.track(1).solo()
-// LOM.track(1).unsolo()
-// LOM.track(2).mute()
-// LOM.track(2).unmute()
-// LOM.track(1).vol(100) // from 1 to 110, 100 is unity gain
-// LOM.track(2).pan(-1) // -1 to 1, 0 is center position
-// LOM.track(1).send(1).set(0) // from 0 to 1
 
 
 
@@ -259,7 +267,6 @@ module.exports = LOM;
 
 // LOM.call(path, order) // e.g LOM.call("live_set", "stop_playing")
 // LOM.Set(path, prop, value) // e.g. LOM.Set("live_set tracks 1 mixer_device sends 1", "value", 0)
-
 // LOM.Get(path, property, callback) // e.g. LOM.Get("live_set", "tempo", (x)=> console.log(x))
 // LOM.Get("live_set tracks 0", "name", (x)=> console.log(x))
 
@@ -267,22 +274,5 @@ module.exports = LOM;
 
 
 
-
-// TO DO \\
-
-// LOM.track(1).dev(1).knob(4).set(value) // LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
-// LOM.track(1).dev(3).off()
-// LOM.tracks(2).dev(4).on()
-// LOM.track(1).clip(4).get("name," (name) => console.log(name)) // "04 The Goodbye World"
-
-// LOM.count(property, callback) // properties: 'tracks', 'clips', 'scenes' // LiveAPI("live_set").getcount('tracks')
-
-// LOM.tracks.count()
-
-
-// LiveAPI("live_set tracks 0 clip_slots 0").get("name")
-
-
-// LOM.track(1).observe("is playing", ( )=> console.log("Track 1 is Playing")).
 
 
