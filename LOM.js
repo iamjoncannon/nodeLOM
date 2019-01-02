@@ -89,7 +89,7 @@ const LOM = {
   },
 
   get: function(value, cb){
-    this.Get(this.path, value, cb)
+    LOM.Get(this.path, value, cb)
   },
 
 
@@ -192,9 +192,14 @@ LOM.track = function(num) {
     },
 
     get(value, cb){
-      this.Get(trackPath, value, cb)
+      console.log(trackPath)
+      if(trackPath.includes("clip_slots")){
+        trackPath += " clip "
+      }
+      
+      LOM.Get(trackPath, value, cb)
     },
-    
+
   };
 
   return obj; 
@@ -285,6 +290,9 @@ module.exports = LOM;
 // the get methods- 
 
 // figure out how to get the name of a track clip
+// LOM.Get("live_set tracks 2 clip_slots 0 clip", "name", (x)=>console.log(x))
+
+
 // figure out how to get the number of devices in a track
 
 
@@ -292,11 +300,16 @@ module.exports = LOM;
 
 // LOM.track(1).clip(4).get("name," (name) => console.log(name)) // "04 Goodbye World!"
 
+
+
+// Counting \\
+
+// LiveAPI("live_set").getcount("tracks")
+
 // LOM.count(property, callback) // properties: 'tracks', 'clips', 'scenes' // LiveAPI("live_set").getcount('tracks')
 
 // LOM.tracks.count()
 // LOM.scenes.count()
-// LOM.track
 
 
 

@@ -67,6 +67,8 @@ LOM.track(1).dev(0).knob(1).set(127) // 1-127 (NB: not 0 indexed)
 LOM.tracks(0).get("name", (x)=>console.log(x)) // "01 Goodbye World boom bap drums"
 LOM.tracks(1).clip(0).get("name", (x)=>console.log(x)) // "Hello Mars entrance synth"
 LOM.get("tempo", (x)=>console.log(x)) // "120" 
+LOM.track(1).dev(0).knob(1).get("name", (name) => console.log(name)) // "my funky knob"
+
 ```
 
 Return a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names
@@ -110,5 +112,5 @@ LOM.Set(path, prop, value) // LOM.Set("live_set tracks 1 mixer_device sends 1", 
 
 LOM.Get(path, property, callback) // LOM.Get("live_set", "is playing", (x)=> console.log(x)) // "true"
 
-LOM.observe(number, path, property, callback) //LOM.observe(0, "live_set master_track mixer_device volume", "value", (x)=>console.log(x)) // ".01232"
+LOM.observe(number, path, property, callback) // LOM.observe(0, "live_set master_track mixer_device volume", "value", (x)=>console.log(x)) // ".01232"
 ```
