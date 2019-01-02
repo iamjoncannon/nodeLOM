@@ -80,14 +80,32 @@ Return a JSON with detailed track information, including all track names, clip n
 
 let myLiveSession = LOM.scrape()
 
-console.log(myLiveSession) 
-
-{
-
-
-
+{...
+'11':
+   { name: 'beats',
+     clips:
+      [ 0,
+        '102 - For The Love Of Money - Disco Dub Band',
+        '109 - Fill Me Up - Elaine & Elen',
+        '109 - Was That All It Was - Jean Carne',
+        '113 - Love Injection - Trussel',
+        '108 - Sexy Eyes - Rozalin Woods',
+        '113 - Mr Magician - Mystic Merlin',
+        '101 - Be Thankful For What You Got - Reel To Real',
+        '116 - Chove Chuva, Mas Que Nada - Samba Soul',
+        "101 - I Can't Forget About You - Ronn Matlock",
+        0 ],
+     deviceParams:
+      [ <1 empty item>,
+        'Output Gain',
+        'Scale',
+        'Adaptive Q',
+        '1 Filter On A',
+        '1 Filter Type A',
+        '1 Frequency A' ] },
+	},
+'12': ...
 }
-
 ```
 
 See below for specific get requests.
