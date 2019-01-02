@@ -15,7 +15,7 @@ The target use case is a local web application that allows multiple users to man
 
 4. Expose the API:
 
-```
+```Javascript
 const LOM = require("./maxLOM/LOM.js")
 
 LOM.connect()
@@ -25,7 +25,7 @@ LOM.connect()
 
 #### Global:
 
-```
+```Javascript
 LOM.play()
 LOM.stop()
 LOM.resume() 
@@ -36,7 +36,7 @@ LOM.scene(1).fire()
 
 #### Track:
 
-```
+```Javascript
 LOM.track(0).clip(0).fire()
 LOM.track(1).stop()
 LOM.track(1).solo()
@@ -49,14 +49,14 @@ LOM.track(1).send(1).set(0) // 0 to 1
 ```
 
 #### Device
-```
+```Javascript
 
 ```
 
 #### Get requests
 
 
-```
+```Javascript
 
 ```
 
@@ -64,15 +64,22 @@ LOM.track(1).send(1).set(0) // 0 to 1
 
 Continuously stream value changes.
 
-```
+```Javascript
 
 ```
 
+By default, five global transport properties are returned as an object to the LOM interface.
+
+These can be routed via the LOM.init() method to a specified callback.
+
+```Javascript
+LOM.init((x)=>console.log(x))
+```
 #### Roll Your Own 
 
 (See LOMstructure.txt for discussion of the API)
 
-```
+```Javascript
 LOM.call(path, command) // LOM.call("live_set", "stop_playing")
 LOM.Set(path, prop, value) // LOM.Set("live_set tracks 1 mixer_device sends 1", "value", 0)
 

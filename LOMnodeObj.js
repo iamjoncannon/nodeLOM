@@ -6,10 +6,6 @@ this hosts a socket io server
 the Max API allows node to 
 connect with the JS object
 
-this file can't export 
-the handler library directly because
-the max api can't be exported outside max 
-
 */
 
 // start a socket io server
@@ -51,7 +47,7 @@ io.sockets.on('connection', function (socket) {
 server.listen(8080);
 
 
-// handlers for the get and observer inputs 
+// handlers for the get and observer relays 
 
 Max.addHandler("got", (path, val, result) => { 
 
