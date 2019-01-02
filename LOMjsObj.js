@@ -104,13 +104,23 @@ for (var i = 0; i < obsArr.length; i++){
 	obsSet(i, null, null)
 }
 
-// default observer values: 
+// default observer values:  
+// global transport information:
+// tempo, volume, position, playing, beat quantization
+
+	// master volume // 
 
 // obsSet(0, "live_set master_track mixer_device volume", "value")
 
+	// the beat
+
 // obsSet(1, the beat)
 
+	// playing or not playing
+
 // obsSet(1, "live_set tracks 0 mixer_device volume", "value")
+
+	// the beat quantization
 
 
 /*

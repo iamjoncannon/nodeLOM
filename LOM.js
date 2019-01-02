@@ -3,8 +3,8 @@
 this is the external library linked to the node max
 object via web sockets
 
-this holds the handler function library that will
-be exported to the consumer node server
+this holds the handler function library that are
+exported to the consumer node server
 
 the data output by the handler functions is routed
 through the socket port to the node max object, 
@@ -13,6 +13,7 @@ that has access to the live api
 
 with get and observer functions, data is also routed
 the other direction to the consumer server from Live
+and exposed to the consumer via specified callbacks
 
 */
 
@@ -26,6 +27,8 @@ let LOM = {
   observeList : {}, // same as getList but not deleted after the value is returned
                     // will stream as long as the socket is connected and the 
                     // observe value is assigned in the LOM interface 
+
+  scrapeObject : {}, // stores the scrape data
 
   // these are global methods
 
@@ -54,8 +57,21 @@ let LOM = {
 
     this.observeList[path+prop] = cb;
 
-    this.outlet(['obsSet', obs, path, prop]);
+    this.outlet(['obsSet', obs, path, prop]); // need to configure this i think
 
+  },
+
+  init: function(){
+
+    //initalize an object that returns the global observe methods as an object
+
+  },
+
+  scrape: function(){
+
+    // initiate a cascade of get calls 
+    // for the total state of the set
+    // store them 
 
   },
 
@@ -199,17 +215,21 @@ LOM.connect = function(){
 
       }
 
+      // here we handle data returned from Live 
+
       if (data.type === 'got'){
 
-        LOM.getList[data.path + data.prop](data.value)
+        LOM.getList[data.path + data.prop](data.value) // calling the callback with the value returned from Live
 
-        LOM.getList[data.path + data.prop] = null;
+        LOM.getList[data.path + data.prop] = null; // resetting the key on the get object
 
       }
 
-      if (data.type === 'observed' && LOM.observeList[data.path.slice(1,-1) + data.prop]){
+      if (data.type === 'observed' && LOM.observeList[data.path.slice(1,-1) + data.prop]){ // same process as above except 
 
-        LOM.observeList[data.path.slice(1,-1) + data.prop](data.value)
+        LOM.observeList[data.path.slice(1,-1) + data.prop](data.value) 
+
+          // note deleting the entry on the object
 
       }
     
