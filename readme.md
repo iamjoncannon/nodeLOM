@@ -9,11 +9,17 @@ The target use case is a local web application that allows multiple users to man
 
 1. git clone https://github.com/iamjoncannon/maxLOM
 
-2. Place LOMcontroller.amxd into Live Session (any track will work)
+2. install dependencies:
 
-3. Press 'script start' button in the Max device. This will spin up the socket.io server locally on port 8080.
+```npm
+npm i socket.io
+```
 
-4. Expose the API:
+3. Place LOMcontroller.amxd into Live Session (any track will work)
+
+4. Press 'script start' button in the Max device. This will spin up the socket.io server locally on port 8080.
+
+5. Expose the API:
 
 ```Javascript
 const LOM = require("./maxLOM/LOM.js")
@@ -57,7 +63,7 @@ LOM.track(1).dev(0).knob(1).set(127) // 1-127 (NB: not 0 indexed)
 
 #### Get requests
 
-Returns a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names
+Return a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names
 
 ```Javascript
 
