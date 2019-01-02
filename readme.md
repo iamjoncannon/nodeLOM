@@ -57,13 +57,15 @@ LOM.track(1).dev(0).knob(1).set(127) // 1-127 (NB: not 0 indexed)
 
 #### Get requests
 
-See below for specific get requests
+Returns a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names
 
 ```Javascript
 
-let myLiveSession = LOM.scape() // returns a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names
+let myLiveSession = LOM.scape() 
 
 ```
+
+See below for specific get requests.
 
 #### LOM.observe
 
