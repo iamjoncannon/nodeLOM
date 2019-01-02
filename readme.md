@@ -96,5 +96,5 @@ LOM.Set(path, prop, value) // LOM.Set("live_set tracks 1 mixer_device sends 1", 
 
 LOM.Get(path, property, callback) // LOM.Get("live_set", "tempo", (x)=> console.log(x))
 
-LOM.observe(0, "live_set master_track mixer_device volume", "value", (x)=>console.log(x))
+LOM.observe(number, path, property, callback) //LOM.observe(0, "live_set master_track mixer_device volume", "value", (x)=>console.log(x))
 ```
