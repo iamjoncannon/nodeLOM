@@ -17,7 +17,7 @@ and exposed to the consumer via specified callbacks
 
 */
 
-let LOM = {
+const LOM = {
 
   path: 'live_set',
 
@@ -61,20 +61,6 @@ let LOM = {
 
   },
 
-  init: function(){
-
-    //initalize an object that returns the global observe methods as an object
-
-  },
-
-  scrape: function(){
-
-    // initiate a cascade of get calls 
-    // for the total state of the set
-    // store them on the scrapeObject
-
-  },
-
   // maniupate the transport 
 
   play: function() {
@@ -101,6 +87,12 @@ let LOM = {
       LOM.Set('live_set', 'tempo', value);
     }, // LiveAPI("live_set").set("tempo", 80);
   },
+
+  get: function(value, cb){
+    this.Get(this.path, value, cb)
+  },
+
+
 };
 
 
@@ -197,7 +189,12 @@ LOM.track = function(num) {
 
     set(val){
       LOM.Set(trackPath, 'value', val)
-    }
+    },
+
+    get(value, cb){
+      this.Get(trackPath, value, cb)
+    },
+    
   };
 
   return obj; 
@@ -262,36 +259,25 @@ LOM.connect = function(){
 
 };
 
+LOM.init = function(){
+
+    //initalize an object that returns the global observe methods as an object
+
+};
+
+LOM.scrape = function(){
+
+    // initiate a cascade of get calls 
+    // for the total state of the set
+    // store them on the scrapeObject
+
+},
+
 module.exports = LOM;
 
 
 
 // TO DO \\
-
-
-
-// FIRST \\
-// last of the set methods \\
-
-// the devices- write the handler functions then update the readme with the sugar
-
-// LOM.track(1).dev(3).off()
-// LOM.tracks(2).dev(4).on()
-
-// LOM.track(1).dev(1).knob(4).set(value) 
-
-// LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
-
-
-
-
-
-// LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
-
-
-
-
-
 
 
 

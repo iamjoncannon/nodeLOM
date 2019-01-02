@@ -63,6 +63,12 @@ LOM.track(1).dev(0).knob(1).set(127) // 1-127 (NB: not 0 indexed)
 
 #### Get requests
 
+```
+LOM.tracks(0).get("name", (x)=>console.log(x)) // "01 Goodbye World"
+LOM.tracks(0).clip(0).get("name", (x)=>console.log(x)) // "Hello Mars"
+LOM.get("tempo", (x)=>console.log(x)) 
+```
+
 Return a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names
 
 ```Javascript
@@ -85,7 +91,7 @@ See below for specific get requests.
 
 Continuously stream value changes. 
 
-The global transport properties can be streamed continuously to a specified callback.
+Global transport properties can be streamed continuously to a specified callback.
 
 ```Javascript
 LOM.init((x)=>console.log(x))
@@ -95,14 +101,14 @@ N.B. the init method utilize observers 1-5, and only 20 observers are available.
 
 #### Roll Your Own 
 
-(See LOMstructure readme for discussion of the API)
+See LOMstructure readme for detailed discussion of how to deal with the Live API
 
 ```Javascript
 LOM.call(path, command) // LOM.call("live_set", "stop_playing")
 
 LOM.Set(path, prop, value) // LOM.Set("live_set tracks 1 mixer_device sends 1", "value", 0)
 
-LOM.Get(path, property, callback) // LOM.Get("live_set", "tempo", (x)=> console.log(x)) // "120"
+LOM.Get(path, property, callback) // LOM.Get("live_set", "is playing", (x)=> console.log(x)) // "true"
 
 LOM.observe(number, path, property, callback) //LOM.observe(0, "live_set master_track mixer_device volume", "value", (x)=>console.log(x)) // ".01232"
 ```
