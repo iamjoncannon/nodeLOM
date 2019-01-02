@@ -288,8 +288,6 @@ LOM.scrape = function(){
   // cascade async get requests from the API
   // create a two dimensional array with track info and clips
 
-
-  let output = [];
   let cache = {}
   function trackCountPromise(){
     return new Promise(resolve=>{
@@ -299,7 +297,7 @@ LOM.scrape = function(){
 
   function trackNameGetPromise(num){
     return new Promise(resolve=>{
-      // LOM.track(num).get('name', (x)=>resolve(output.push([x]))) // arrray solution
+
       LOM.track(num).get('name', (x)=>resolve( cache[num] = {name: x, clips: [], deviceParams: []} )) // object solution
 
     })
@@ -335,11 +333,22 @@ LOM.scrape = function(){
         LOM.track(trackNum).clip(clipNum).get('name', (x)=>resolve(inputArr[clipNum] = x))
       
       })
-    }
+  }
+
+  function deviceParamsGetPromise(inputArr, trackNum, devNum){
+      return new Promise(resolve=>{
+
+        // console.log(inputArr)
+        LOM.track(trackNum).dev(0).knob(devNum).get('name', (x)=>resolve(inputArr[devNum] = x))
+      
+      })
+  }
 
   async function asyncSceneScrape(trackArray, scenesNum){
     // console.log(Object.keys(trackArray))
     let scenes = [];
+
+    let devices = [1,2,3,4,5,6]
 
     for(let i =0; i < scenesNum; i++){
       scenes.push(i)
@@ -349,9 +358,17 @@ LOM.scrape = function(){
 
     for (let j of Object.keys(trackArray)){
 
+      console.log("processing track: ", j, '\n')
+
       for (let k of scenes){
           await clipNameGetPromise(trackArray[j].clips, j, k )
       }
+
+      for (let L of devices){
+
+          await deviceParamsGetPromise(trackArray[j].deviceParams, j, L)
+      }
+
     
     };
     
@@ -359,14 +376,17 @@ LOM.scrape = function(){
   }
 
   async function theScrape(){
+
     let trackCount = await trackCountPromise();
-    let trackList = await asyncTrackScrape(trackCount);
+    console.log('tracks: ', trackCount, '\n')
     let sceneCount = await sceneCountPromise();
+    console.log('scenes: ', sceneCount, '\n')
+    let trackList = await asyncTrackScrape(trackCount);
     let finalArray = await asyncSceneScrape(trackList, sceneCount)
 
+    // return {track_count: trackCount, scene_count: sceneCount, track_details: finalArray}
+    return finalArray 
 
-    // return {scenes: sceneCount, tracks: trackList}
-    return finalArray
   }
 
   return theScrape()
