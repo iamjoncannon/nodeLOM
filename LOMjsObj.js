@@ -65,7 +65,7 @@ function count(path, prop){
 // observer 
 
 observeCB = function(valChange){
-
+		post('observer CB: ', this.path, valChange)
 		outlet(1, 'observed', this.path, valChange) 
 										// the cb argument is the property 
 										// and the changed value
@@ -103,7 +103,7 @@ obs11, obs12, obs13, obs14, obs15, obs16, obs17, obs18, obs19, obs20];
 
 
 function obsSet(observer, path, property){
-
+	post(observer, path, property)
 	obsArr[observer].path = path; // "live_set master_track mixer_device volume";
 	obsArr[observer].property = property; // "value";
 	obsArr[observer].mode = 1; // prevents assignment from changing if the order of the tracks changes

@@ -67,9 +67,15 @@ const LOM = {
 
   observe: function(obs, path, prop, cb){
 
-    this.observeList[path+prop] = cb;
+    let entry = path + prop;
+    entry = entry.split(' ').join('')
+    // console.log(entry.split(' ').join(''))
+    // console.log(String(entry))
+    this.observeList[entry] = cb;
 
     this.outlet(['obsSet', obs, path, prop]); 
+
+    // console.log(obs, path, prop, cb)
 
   },
 
@@ -275,9 +281,18 @@ LOM.connect = function(){
 
       }
 
-      if (data.type === 'observed' && LOM.observeList[data.path.slice(1,-1) + data.prop]){ // same process as above except 
+      // console.log('received from live:\n')
+      // console.log(data)
 
-        LOM.observeList[data.path.slice(1,-1) + data.prop](data.value) 
+      if (data.type === 'observed' && !(data.prop === 'id')){
+
+        let entry = (data.path + data.prop).replace('"', '').replace('"', '').split(' ').join('')
+
+        // console.log('entry: ', entry)
+        LOM.observeList[entry](data.value)
+
+          // console.log(LOM.observeList)
+          // console.log(LOM.observeList[data.path + data.prop])
 
       }
     

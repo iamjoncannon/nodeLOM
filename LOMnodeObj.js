@@ -56,7 +56,7 @@ Max.addHandler("got", (path, val, result) => {
 })
 
 Max.addHandler("observed", (path, val, result) => { 
-
+    // console.log('observed', path, val, result)
 	io.emit('fromServer', { type: 'observed', path: path, prop: val, value: result } )
 
 })
