@@ -3,7 +3,7 @@
 
 Leverages the recently added Node.js object in Max For Live to update a previous npm package - "max4node" https://www.npmjs.com/package/max4node - using the socket.io library instead of the Max UDP object to communicate with an external server.
 
-The target use case is a local web application that allows multiple users to manipulate an Abelton Live session. See serverFunk repo for example of multiplayer set up. 
+The target use case is a local web application that allows multiple users to manipulate an Abelton Live session. 
 
 ## Installation:
 
@@ -50,40 +50,43 @@ LOM.track(1).send(1).set(0) // 0 to 1
 
 #### Device
 ```Javascript
-
+LOM.track(1).dev(3).off()
+LOM.tracks(2).dev(4).on()
+LOM.track(1).dev(0).knob(1).set(127) // 1-127 (NB: not 0 indexed)
 ```
 
 #### Get requests
 
+See below for specific get requests
 
 ```Javascript
+
+let myLiveSession = LOM.scape() // returns a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names
 
 ```
 
 #### LOM.observe
 
-Continuously stream value changes.
+Continuously stream value changes. 
 
-```Javascript
-
-```
-
-By default, five global transport properties are returned as an object to the LOM interface.
-
-These can be routed via the LOM.init() method to a specified callback.
+The global transport properties can be streamed continuously to a specified callback.
 
 ```Javascript
 LOM.init((x)=>console.log(x))
 ```
+
+N.B. the init observers utilize observers 1-5, and only 20 observers are available. 
+
 #### Roll Your Own 
 
-(See LOMstructure.txt for discussion of the API)
+(See LOMstructure readme for discussion of the API)
 
 ```Javascript
 LOM.call(path, command) // LOM.call("live_set", "stop_playing")
+
 LOM.Set(path, prop, value) // LOM.Set("live_set tracks 1 mixer_device sends 1", "value", 0)
 
 LOM.Get(path, property, callback) // LOM.Get("live_set", "tempo", (x)=> console.log(x))
 
-LOM.observe(0, "live_set master_track mixer_device volume", "value", function(x){console.log(x)})
+LOM.observe(0, "live_set master_track mixer_device volume", "value", (x)=>console.log(x))
 ```

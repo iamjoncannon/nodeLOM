@@ -71,14 +71,14 @@ let LOM = {
 
     // initiate a cascade of get calls 
     // for the total state of the set
-    // store them 
+    // store them on the scrapeObject
 
   },
 
   // maniupate the transport 
 
   play: function() {
-    // console.log('bang')
+
     this.call(this.path, 'start_playing');
   },
 
@@ -165,6 +165,31 @@ LOM.track = function(num) {
 
     }, // "live_set tracks 0 clip_slots 0"
 
+    dev(num) {
+      trackPath += ' devices ' + num
+      return this
+    },
+
+    knob(num) {
+      trackPath += ' parameters ' + num
+      return this
+
+    },
+
+    on() {
+      trackPath += ' parameters 0 ' 
+      console.log(trackPath)
+      LOM.Set(trackPath, 'value', 1)
+
+    },
+
+    off() {
+      trackPath += ' parameters 0 ' 
+      console.log(trackPath)
+
+      LOM.Set(trackPath, 'value', 0)
+    },
+
     send(sendNum){
       trackPath += ' mixer_device sends ' + sendNum;
       return this; 
@@ -211,8 +236,6 @@ LOM.connect = function(){
 
         LOM.sockID = data.id
 
-        // console.log(LOM.sockID)
-
       }
 
       // here we handle data returned from Live 
@@ -228,8 +251,6 @@ LOM.connect = function(){
       if (data.type === 'observed' && LOM.observeList[data.path.slice(1,-1) + data.prop]){ // same process as above except 
 
         LOM.observeList[data.path.slice(1,-1) + data.prop](data.value) 
-
-          // note deleting the entry on the object
 
       }
     
@@ -254,9 +275,16 @@ module.exports = LOM;
 
 // the devices- write the handler functions then update the readme with the sugar
 
-// LOM.track(1).dev(1).knob(4).set(value) // LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
 // LOM.track(1).dev(3).off()
 // LOM.tracks(2).dev(4).on()
+
+// LOM.track(1).dev(1).knob(4).set(value) 
+
+// LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
+
+
+
+
 
 // LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
 
@@ -273,10 +301,16 @@ module.exports = LOM;
 // figure out how to get the name of a track clip
 // figure out how to get the number of devices in a track
 
-// LOM.track(1).clip(4).get("name," (name) => console.log(name)) // "04 The Goodbye World"
+
+// LiveAPI("live_set tracks 0 clip_slots 0").get("name")
+
+// LOM.track(1).clip(4).get("name," (name) => console.log(name)) // "04 Goodbye World!"
+
 // LOM.count(property, callback) // properties: 'tracks', 'clips', 'scenes' // LiveAPI("live_set").getcount('tracks')
+
 // LOM.tracks.count()
 // LOM.scenes.count()
+// LOM.track
 
 
 
@@ -303,7 +337,6 @@ returns an object representing the whole set
 
 */
 
-// LiveAPI("live_set tracks 0 clip_slots 0").get("name")
 
 
 
