@@ -22,6 +22,8 @@ let idList = []
 
 io.sockets.on('connection', function (socket) {
 
+    console.log('conncted')
+
 	idList.push(socket.id) 
 
     // this emits only to the socket that just connected
@@ -42,7 +44,12 @@ io.sockets.on('connection', function (socket) {
 
 	})
 
+    socket.on('disconnect', function(){
+        Max.outlet('obsSet', 'reset')
+    })
+
 });
+
 
 server.listen(8080);
 

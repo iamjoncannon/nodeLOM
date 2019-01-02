@@ -24,7 +24,7 @@ const LOM = {
   getList : {}, // basically a bootleg form of Promises-
                 // stores get request callbacks to return once the value is returned from Abe
 
-  observeList : {}, // same as getList but not deleted after the value is returned
+  observeList : {live_settempo: ()=>{}}, // same as getList but not deleted after the value is returned
                     // will stream as long as the socket is connected and the 
                     // observe value is assigned in the LOM interface 
 
@@ -258,9 +258,17 @@ LOM.connect = function(){
 
     socket.on('fromServer', function(data){ 
 
+      // let obsOpen = false;
+
       if (data.type === 'openMessage'){
 
         console.log(data.value)
+
+        LOM.observeList = {live_settempo: ()=>{}}
+
+        LOM.observe('reset', 'this', 'resetsTheObservers', ()=>{})
+
+        obsOpen = true;
 
       }
 
@@ -284,12 +292,12 @@ LOM.connect = function(){
       // console.log('received from live:\n')
       // console.log(data)
 
-      if (data.type === 'observed' && !(data.prop === 'id')){
+      if (obsOpen && data.type === 'observed' && !(data.prop === 'id')){
 
         let entry = (data.path + data.prop).replace('"', '').replace('"', '').split(' ').join('')
 
         // console.log('entry: ', entry)
-        LOM.observeList[entry](data.value)
+        LOM.observeList[entry](data.value);
 
           // console.log(LOM.observeList)
           // console.log(LOM.observeList[data.path + data.prop])
@@ -432,9 +440,41 @@ LOM.scrape = function(){
 },
 
 
-LOM.init = function(){
+LOM.initObs = function(callback){
 
     //initalize an object that returns the global observe methods as an object
+
+
+    function playingCB(x){
+      let output
+      x === 0 ? output = "Abe is not playing" : output = "Abe is bangin!" ;
+      // console.log('\n')
+      callback(output)
+    }
+
+    LOM.observe(0, "live_set", "is_playing", playingCB)
+
+    function mastVolCB(x){
+      callback('master volume: ', x)
+    }
+
+
+    LOM.observe(1, "live_set master_track mixer_device volume", "value", mastVolCB)
+
+
+    function progressCB(x){
+      callback('track time: ', x)
+    }
+
+    LOM.observe(2, "live_set", "current_song_time", progressCB)
+
+    function meterCB(x){
+      callback('master track output level: ', x)
+    }
+
+    LOM.observe(3, "live_set master_track", "output_meter_level", meterCB)
+
+
 
 };
 

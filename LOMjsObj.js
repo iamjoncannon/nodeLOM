@@ -102,12 +102,21 @@ var obsArr = [obs1, obs2, obs3, obs4, obs5, obs6, obs7, obs8, obs9, obs10,
 obs11, obs12, obs13, obs14, obs15, obs16, obs17, obs18, obs19, obs20];
 
 
-function obsSet(observer, path, property){
-	post(observer, path, property)
-	obsArr[observer].path = path; // "live_set master_track mixer_device volume";
-	obsArr[observer].property = property; // "value";
-	obsArr[observer].mode = 1; // prevents assignment from changing if the order of the tracks changes
+function obsSet(observer, INpath, INproperty){
+	post(observer, INpath, INproperty)
+	
 
+	if (observer === 'reset'){
+
+		obsReset()
+
+	}
+	else{
+		obsArr[observer].path = INpath; // "live_set master_track mixer_device volume";
+	obsArr[observer].property = INproperty; // "value";
+	obsArr[observer].mode = 1; // prevents assignment from changing if the order of the tracks changes
+	}
+	
 }
 
 // zero out any previous observer assignments
@@ -115,7 +124,16 @@ function obsSet(observer, path, property){
 
 for (var i = 0; i < obsArr.length; i++){
 
-	obsSet(i, null, null)
+	obsSet(i, "live_set", "root_note")
+}
+
+function obsReset(){
+
+	for (var i = 0; i < obsArr.length; i++){
+
+		obsSet(i, "live_set", "root_note")
+	}
+
 }
 
 // default observer values:  

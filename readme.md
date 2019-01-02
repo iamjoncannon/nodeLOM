@@ -118,7 +118,7 @@ Global transport properties can be streamed continuously to a specified callback
 LOM.init((x)=>console.log(x))
 ```
 
-N.B. the init method utilize observers 1-5, and only 20 observers are available. 
+N.B. the init method utilize observers 1-5, and only 20 observers are available. Tempo cannot be observed.
 
 #### Roll Your Own 
 
