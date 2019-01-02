@@ -84,6 +84,10 @@ const LOM = {
     this.call(this.path, 'stop_playing');
   },
 
+  clear: function() {
+    this.call(this.path, 'stop_all_clips')
+  },
+
   resume: function() {
     this.call(this.path, 'continue_playing');
   },
@@ -291,6 +295,7 @@ LOM.scrape = function(){
   // async functions to scrape the Live session
 
   let cache = {};
+  let sceneArr = [];
 
   function trackCountPromise(){
     return new Promise(resolve=>{
@@ -323,6 +328,14 @@ LOM.scrape = function(){
     return cache;
   }
 
+  function sceneNameGetPromise(num){
+    return new Promise(resolve=>{
+
+      LOM.scene(num).get('name', (x)=>resolve( sceneArr[num] =  x ))
+
+    })
+  }
+
   function sceneCountPromise(){
     return new Promise(resolve=>{
       LOM.count('scenes', (x)=>{resolve(x)})
@@ -345,7 +358,6 @@ LOM.scrape = function(){
       })
   }
 
-
   async function asyncSceneScrape(trackArray, scenesNum){
 
     let scenes = [];
@@ -355,9 +367,9 @@ LOM.scrape = function(){
     for(let i =0; i < scenesNum; i++){
       scenes.push(i)
 
+      await sceneNameGetPromise(i)
+
     }
-
-
 
     for (let j of Object.keys(trackArray)){
 
@@ -391,6 +403,11 @@ LOM.scrape = function(){
     let trackList = await asyncTrackScrape(trackCount);
     let finalArray = await asyncSceneScrape(trackList, sceneCount)
 
+    console.log("scrapped " + trackCount + " tracks", '\n')
+    cache['track count'] = trackCount;
+    cache['scene count'] = sceneCount;
+    cache['scene names'] = sceneArr;
+    console.log(finalArray)
     return finalArray 
 
   }
