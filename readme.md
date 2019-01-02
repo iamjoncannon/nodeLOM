@@ -9,7 +9,7 @@ The target use case is a local web application that allows multiple users to man
 
 1. git clone https://github.com/iamjoncannon/maxLOM
 
-2. install dependencies:
+2. install dependencies into subdirectory:
 
 ```npm
 npm i socket.io
@@ -22,7 +22,7 @@ npm i socket.io
 5. Expose the API:
 
 ```Javascript
-const LOM = require("./maxLOM/LOM.js")
+const LOM = require("./maxLOM/LOM.js") // or ("./../maxLOM/LOM.js")
 
 LOM.connect()
 ```
@@ -56,8 +56,8 @@ LOM.track(1).send(1).set(0) // 0 to 1
 
 #### Device
 ```Javascript
-LOM.track(1).dev(3).off()
-LOM.tracks(2).dev(4).on()
+LOM.track(1).dev(0).off() // disables device
+LOM.tracks(2).dev(0).on() // enables device
 LOM.track(1).dev(0).knob(1).set(127) // 1-127 (NB: not 0 indexed)
 ```
 
@@ -67,7 +67,15 @@ Return a JSON with detailed track information, including all track names, clip n
 
 ```Javascript
 
-let myLiveSession = LOM.scape() 
+let myLiveSession = LOM.scrape()
+
+console.log(myLiveSession) 
+
+{
+
+
+
+}
 
 ```
 
@@ -83,7 +91,7 @@ The global transport properties can be streamed continuously to a specified call
 LOM.init((x)=>console.log(x))
 ```
 
-N.B. the init observers utilize observers 1-5, and only 20 observers are available. 
+N.B. the init method utilize observers 1-5, and only 20 observers are available. 
 
 #### Roll Your Own 
 
@@ -94,7 +102,7 @@ LOM.call(path, command) // LOM.call("live_set", "stop_playing")
 
 LOM.Set(path, prop, value) // LOM.Set("live_set tracks 1 mixer_device sends 1", "value", 0)
 
-LOM.Get(path, property, callback) // LOM.Get("live_set", "tempo", (x)=> console.log(x))
+LOM.Get(path, property, callback) // LOM.Get("live_set", "tempo", (x)=> console.log(x)) // "120"
 
-LOM.observe(number, path, property, callback) //LOM.observe(0, "live_set master_track mixer_device volume", "value", (x)=>console.log(x))
+LOM.observe(number, path, property, callback) //LOM.observe(0, "live_set master_track mixer_device volume", "value", (x)=>console.log(x)) // ".01232"
 ```
