@@ -63,7 +63,7 @@ LOM.track(1).dev(0).knob(1).set(127) // 1-127 (NB: not 0 indexed)
 
 #### Get requests
 
-```
+```Javascript
 LOM.tracks(0).get("name", (x)=>console.log(x)) // "01 Goodbye World"
 LOM.tracks(0).clip(0).get("name", (x)=>console.log(x)) // "Hello Mars"
 LOM.get("tempo", (x)=>console.log(x)) 
