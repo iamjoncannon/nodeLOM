@@ -73,7 +73,7 @@ const LOM = {
 
   },
 
-  // maniupate the transport 
+  // transport 
 
   play: function() {
 
@@ -112,7 +112,6 @@ LOM.track = function(num) {
   let trackPath = this.path + ' tracks ' + num;
   let trackProp;
 
-  // source for this part:
   // https://medium.com/@jamischarles/how-to-chain-functions-in-javascript-6644d44793fd
 
   let obj = {
@@ -211,7 +210,7 @@ LOM.track = function(num) {
     },
 
     count(value, cb){
-      console.log(trackPath, value)
+      // console.log(trackPath, value)
       LOM.Get(trackPath, value, cb)
     }
 
@@ -226,9 +225,15 @@ LOM.scene = function(num) {
   let trackPath = this.path + ' scenes ' + num;
 
   let obj = {
+  
     fire() {
       LOM.call(trackPath, 'fire');
     },
+
+    get(value,cb) {
+      LOM.Get(trackPath,value, cb)
+    },
+  
   };
 
   return obj;
@@ -237,17 +242,17 @@ LOM.scene = function(num) {
  
 LOM.connect = function(){
 
-    // this creates a client connection with the max node socket.io server
-
     const io = require('socket.io-client');
 
     socket = io.connect('http://localhost:8080'); 
 
-    // we can assign the listeners for data from the Max node server here
-
     socket.on('fromServer', function(data){ 
 
-      // console.log(data.message)
+      if (data.type === 'openMessage'){
+
+        console.log(data.value)
+
+      }
 
       if (data.type == 'id'){
 
@@ -255,7 +260,7 @@ LOM.connect = function(){
 
       }
 
-      // here we handle data returned from Live 
+      // handle data returned from Live 
 
       if (data.type === 'got'){
               // console.log(data)
@@ -282,6 +287,8 @@ LOM.connect = function(){
 
 
 LOM.scrape = function(){
+
+  // async functions to scrape the Live session
 
   let cache = {};
 
@@ -338,6 +345,7 @@ LOM.scrape = function(){
       })
   }
 
+
   async function asyncSceneScrape(trackArray, scenesNum){
 
     let scenes = [];
@@ -346,7 +354,10 @@ LOM.scrape = function(){
 
     for(let i =0; i < scenesNum; i++){
       scenes.push(i)
+
     }
+
+
 
     for (let j of Object.keys(trackArray)){
 
@@ -370,9 +381,13 @@ LOM.scrape = function(){
   async function theScrape(){
 
     let trackCount = await trackCountPromise();
+
     console.log('tracks: ', trackCount, '\n')
+    
     let sceneCount = await sceneCountPromise();
+    
     console.log('scenes: ', sceneCount, '\n')
+    
     let trackList = await asyncTrackScrape(trackCount);
     let finalArray = await asyncSceneScrape(trackList, sceneCount)
 
@@ -380,7 +395,7 @@ LOM.scrape = function(){
 
   }
 
-  return theScrape()
+  return theScrape() 
 
 },
 

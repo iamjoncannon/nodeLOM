@@ -108,8 +108,6 @@ let myLiveSession = LOM.scrape()
 }
 ```
 
-See below for specific get requests.
-
 #### LOM.observe
 
 Continuously stream value changes. 

@@ -26,7 +26,7 @@ io.sockets.on('connection', function (socket) {
 
     // this emits only to the socket that just connected
 
-    socket.emit('fromServer', { message: `Connected to Ableton Live via socket.io at socket id: ${socket.id}`} ); 
+    socket.emit('fromServer', { type: "openMessage", value: `Connected to Ableton Live via socket.io at socket id: ${socket.id}`} ); 
 
     // socket.emit('fromServer', { type: 'id', id: socket.id} ); 
     	// send to the client, will append get and observer requests
