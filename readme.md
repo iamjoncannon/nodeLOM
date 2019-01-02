@@ -11,7 +11,7 @@ The target use case is a local web application that allows multiple users to man
 
 2. install dependencies into subdirectory:
 
-```npm
+```node
 npm i socket.io
 ```
 
@@ -64,9 +64,9 @@ LOM.track(1).dev(0).knob(1).set(127) // 1-127 (NB: not 0 indexed)
 #### Get requests
 
 ```Javascript
-LOM.tracks(0).get("name", (x)=>console.log(x)) // "01 Goodbye World"
-LOM.tracks(0).clip(0).get("name", (x)=>console.log(x)) // "Hello Mars"
-LOM.get("tempo", (x)=>console.log(x)) 
+LOM.tracks(0).get("name", (x)=>console.log(x)) // "01 Goodbye World boom bap drums"
+LOM.tracks(1).clip(0).get("name", (x)=>console.log(x)) // "Hello Mars entrance synth"
+LOM.get("tempo", (x)=>console.log(x)) // "120" 
 ```
 
 Return a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names
