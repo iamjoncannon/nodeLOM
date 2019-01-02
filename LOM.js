@@ -27,7 +27,9 @@ let LOM = {
                     // will stream as long as the socket is connected and the 
                     // observe value is assigned in the LOM interface 
 
-  outlet: function(data){
+  // these are global methods
+
+  outlet: function(data){ 
 
     this.socket.emit('fromClient', data)
 
@@ -57,6 +59,8 @@ let LOM = {
 
   },
 
+  // maniupate the transport 
+
   play: function() {
     // console.log('bang')
     this.call(this.path, 'start_playing');
@@ -83,12 +87,13 @@ let LOM = {
   },
 };
 
+
 LOM.track = function(num) {
 
   let trackPath = this.path + ' tracks ' + num;
   let trackProp;
 
-  // s/o the source for this part:
+  // source for this part:
   // https://medium.com/@jamischarles/how-to-chain-functions-in-javascript-6644d44793fd
 
   let obj = {
@@ -157,6 +162,7 @@ LOM.track = function(num) {
   return obj; 
 };
 
+
 LOM.scene = function(num) {
 
   let trackPath = this.path + ' scenes ' + num;
@@ -170,6 +176,7 @@ LOM.scene = function(num) {
   return obj;
 };
 
+ 
 LOM.connect = function(){
 
     // this creates a client connection with the max node socket.io server
@@ -220,6 +227,8 @@ module.exports = LOM;
 
 // TO DO \\
 
+
+
 // FIRST \\
 // last of the set methods \\
 
@@ -232,10 +241,17 @@ module.exports = LOM;
 // LOM.Set("live_set tracks 1 devices 1 parameters 0", "value", 0 )
 
 
+
+
+
+
+
+
 // SECOND // finalize the functions for
 // the get methods- 
+
 // figure out how to get the name of a track clip
-// figure out how to 
+// figure out how to get the number of devices in a track
 
 // LOM.track(1).clip(4).get("name," (name) => console.log(name)) // "04 The Goodbye World"
 // LOM.count(property, callback) // properties: 'tracks', 'clips', 'scenes' // LiveAPI("live_set").getcount('tracks')
@@ -243,36 +259,50 @@ module.exports = LOM;
 // LOM.scenes.count()
 
 
-// THIRD- put the get methods together into one big final
+
+
+
+
+
+
+
+
+// THIRD- put the get methods together into one big get request
 
 // LOM.scrape() 
-// returns an object representing the whole set- number of tracks, track names, number of scenes, track info- 
 
+/* 
+
+returns an object representing the whole set
+  - number of tracks
+  - track names 
+  - number of scenes
+  - track info
+    - device parameter names
+    - clip names
+
+*/
 
 // LiveAPI("live_set tracks 0 clip_slots 0").get("name")
 
 
-// LAST BUT NOT LEAST
+
+
+
+
+
+
+
+
+
+
+
+
+// Fourth
 
 // observe method-
 
 // LOM.track(1).observe("is playing", ( )=> console.log("Track 1 is Playing")).
 
-
-
-
-
-
-// Roll Your Own - see LOM structure readme for discussion \\
-
-// LOM.call(path, order) // e.g LOM.call("live_set", "stop_playing")
-// LOM.Set(path, prop, value) // e.g. LOM.Set("live_set tracks 1 mixer_device sends 1", "value", 0)
-// LOM.Get(path, property, callback) // e.g. LOM.Get("live_set", "tempo", (x)=> console.log(x))
-// LOM.Get("live_set tracks 0", "name", (x)=> console.log(x))
-
-// LOM.observe(0, "live_set master_track mixer_device volume", "value", function(x){console.log(x)})
-
-
-
-
+// suggested observe list/things to use with server funk
 
