@@ -1,7 +1,7 @@
 
 # maxLOM- Live API <-> socket.io 
 
-Leverages the recently added Node.js object in Max For Live to update a previous npm package - "max4node" https://www.npmjs.com/package/max4node - using the socket.io library instead of the Max UDP object to communicate with an external server.
+Leverages the recently added Node.js object in Max For Live to update a previous npm package - "max4node" https://www.npmjs.com/package/max4node - using socket.io instead of the Max UDP object to communicate with an external server.
 
 The target use case is a local web application that allows multiple users to manipulate an Abelton Live session. 
 

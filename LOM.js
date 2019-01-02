@@ -285,11 +285,91 @@ LOM.connect = function(){
 
 LOM.scrape = function(){
 
-    
+  // cascade async get requests from the API
+  // create a two dimensional array with track info and clips
 
-    // initiate a cascade of get calls 
-    // for the total state of the set
-    // store them on the scrapeObject
+
+  let output = [];
+  let cache = {}
+  function trackCountPromise(){
+    return new Promise(resolve=>{
+      LOM.count('tracks', (x)=>{resolve(x)})
+    })
+  }
+
+  function trackNameGetPromise(num){
+    return new Promise(resolve=>{
+      // LOM.track(num).get('name', (x)=>resolve(output.push([x]))) // arrray solution
+      LOM.track(num).get('name', (x)=>resolve( cache[num] = {name: x, clips: [], deviceParams: []} )) // object solution
+
+    })
+  }
+
+  async function asyncTrackScrape(count){
+
+    let list = [];
+
+    for(let i =0; i < count;i++){
+      list.push(i)
+    }
+
+    for (let j of list){
+
+      await trackNameGetPromise(j)
+    
+    };
+    
+    return cache;
+  }
+
+  function sceneCountPromise(){
+    return new Promise(resolve=>{
+      LOM.count('scenes', (x)=>{resolve(x)})
+    })
+  }
+
+  function clipNameGetPromise(inputArr, trackNum, clipNum){
+      return new Promise(resolve=>{
+
+        // console.log(inputArr)
+        LOM.track(trackNum).clip(clipNum).get('name', (x)=>resolve(inputArr[clipNum] = x))
+      
+      })
+    }
+
+  async function asyncSceneScrape(trackArray, scenesNum){
+    // console.log(Object.keys(trackArray))
+    let scenes = [];
+
+    for(let i =0; i < scenesNum; i++){
+      scenes.push(i)
+    }
+
+    // console.log(scenes)
+
+    for (let j of Object.keys(trackArray)){
+
+      for (let k of scenes){
+          await clipNameGetPromise(trackArray[j].clips, j, k )
+      }
+    
+    };
+    
+    return trackArray;
+  }
+
+  async function theScrape(){
+    let trackCount = await trackCountPromise();
+    let trackList = await asyncTrackScrape(trackCount);
+    let sceneCount = await sceneCountPromise();
+    let finalArray = await asyncSceneScrape(trackList, sceneCount)
+
+
+    // return {scenes: sceneCount, tracks: trackList}
+    return finalArray
+  }
+
+  return theScrape()
 
 },
 
