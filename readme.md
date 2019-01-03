@@ -3,8 +3,6 @@
 
 Leverages the recently added Node.js object in Max For Live to update a previous npm package - "max4node" https://www.npmjs.com/package/max4node - using socket.io instead of the Max UDP object to communicate with an external server.
 
-The target use case is a local web application that allows multiple users to manipulate a Live session. 
-
 ## Installation:
 
 1. git clone https://github.com/iamjoncannon/nodeLOM
@@ -22,7 +20,7 @@ npm i socket.io
 5. Expose the API:
 
 ```Javascript
-const LOM = require("./maxLOM/LOM.js") // or ("./../nodeLOM/LOM.js")
+const LOM = require("./maxLOM/LOM.js")
 
 LOM.connect()
 ```
@@ -137,19 +135,21 @@ let myLiveSession = LOM.scrape()
 
 Continuously stream value changes. 
 
-Global transport properties can be streamed continuously to a specified callback.
-
 ```Javascript
-LOM.init((x)=>console.log(x))
+LOM.init((x)=>console.log(x)) // routes the following observers
 
+{ 'current tempo': 118 }
 { 'playing?': 'Abe is not playing' }
-{ 'master volume': 0.840765237808 }
-{ 'track time': 7.07821617536 }
+{ 'master volume fader': 0.840765237808 }
+{ 'track time': 4.70006575964 }
+{ 'beat position': [ 5 ] }
 { 'master track output level': 0 }
 
 ```
 
 #### Roll Your Own 
+
+good starter: http://compusition.com/writings/js-live-api-basics
 
 ```Javascript
 LOM.call(path, command) // LOM.call("live_set", "stop_playing")

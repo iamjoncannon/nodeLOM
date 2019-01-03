@@ -467,12 +467,6 @@ LOM.initObs = function(callback){
 
     LOM.observe(3, "live_set master_track", "output_meter_level", meterCB)
 
-    function loopCB(x){
-      callback({'looping?': x})
-    }
-
-    LOM.observe(4, "live_set", "loop_start", loopCB)
-
 };
 
 module.exports = LOM;
