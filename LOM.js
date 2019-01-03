@@ -11,9 +11,13 @@ const LOM = {
 
   getList : {}, // cache for get requests returned from Live
 
-  observeList : {}, 
+  observeList : {},
 
-  // these are global methods
+  currentTempo: null,
+
+  currentTrackTime: null,
+
+  // global methods
 
   outlet: function(data){ 
 
@@ -54,13 +58,10 @@ const LOM = {
 
     let entry = path + prop;
     entry = entry.split(' ').join('')
-    // console.log(entry.split(' ').join(''))
-    // console.log(String(entry))
+
     this.observeList[entry] = cb;
 
     this.outlet(['obsSet', obs, path, prop]); 
-
-    // console.log(obs, path, prop, cb)
 
   },
 
@@ -242,8 +243,6 @@ LOM.connect = function(){
 
     socket.on('fromServer', function(data){ 
 
-      // let obsOpen = false;
-
       if (data.type === 'openMessage'){
 
         console.log(data.value)
@@ -265,26 +264,18 @@ LOM.connect = function(){
       // handle data returned from Live 
 
       if (data.type === 'got'){
-              // console.log(data)
 
-        LOM.getList[data.path + data.prop](data.value) // calling the callback with the value returned from Live
+        LOM.getList[data.path + data.prop](data.value) // retreive callback from cache
 
-        LOM.getList[data.path + data.prop] = null; // resetting the key on the get object
+        LOM.getList[data.path + data.prop] = null; // reset the cache
 
       }
-
-      // console.log('received from live:\n')
-      // console.log(data)
 
       if (obsOpen && data.type === 'observed' && !(data.prop === 'id')){
 
         let entry = (data.path + data.prop).replace('"', '').replace('"', '').split(' ').join('')
 
-        // console.log('entry: ', entry)
         LOM.observeList[entry](data.value);
-
-          // console.log(LOM.observeList)
-          // console.log(LOM.observeList[data.path + data.prop])
 
       }
     
@@ -336,6 +327,7 @@ LOM.scrape = function(){
   }
 
   function sceneNameGetPromise(num){
+
     return new Promise(resolve=>{
 
       LOM.scene(num).get('name', (x)=>resolve( sceneArr[num] =  x ))
@@ -426,7 +418,12 @@ LOM.scrape = function(){
 
 LOM.initObs = function(callback){
 
-    //initalize an object that returns the global observe methods as an object
+    function tempoCB(x){
+      LOM.currentTempo = x
+      callback({'current tempo' : x})
+    }
+
+    LOM.observe(5, "live_set", "tempo", tempoCB)
 
     function playingCB(x){
       let output
@@ -438,15 +435,22 @@ LOM.initObs = function(callback){
     LOM.observe(0, "live_set", "is_playing", playingCB)
 
     function mastVolCB(x){
-      callback({'master volume': x})
+      callback({'master volume fader': x})
     }
-
 
     LOM.observe(1, "live_set master_track mixer_device volume", "value", mastVolCB)
 
+    function beatPosition(time){
+
+      return [Math.round(time % LOM.currentTempo)]
+
+    }
 
     function progressCB(x){
+      LOM.currentTrackTime = x;
       callback({'track time': x})
+      callback({'beat position': beatPosition(LOM.currentTrackTime) })
+
     }
 
     LOM.observe(2, "live_set", "current_song_time", progressCB)
@@ -456,6 +460,12 @@ LOM.initObs = function(callback){
     }
 
     LOM.observe(3, "live_set master_track", "output_meter_level", meterCB)
+
+    function loopCB(x){
+      callback({'looping?': x})
+    }
+
+    LOM.observe(4, "live_set", "loop_start", loopCB)
 
 };
 

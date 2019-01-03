@@ -74,6 +74,8 @@ LOM.count("scenes", (scenes)=>console.log(scenes)) // "8"
 
 ```
 
+#### Scrape Set Data
+
 Return a JSON with detailed track information, including all track names, clip names, scene numbers, devices, and device parameter names
 
 ```Javascript
@@ -112,7 +114,7 @@ let myLiveSession = LOM.scrape()
      ' synth breakdown',
      ' 5',
      ' 6',
-     ' 7',
+     ' remember 4u wholsale chorus',
      ' 8',
      ' 9',
      ' 10',
@@ -131,7 +133,7 @@ let myLiveSession = LOM.scrape()
 }
 ```
 
-#### LOM.observe
+#### Stream Data- LOM.observe 
 
 Continuously stream value changes. 
 
