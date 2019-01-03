@@ -17,6 +17,12 @@ const LOM = {
 
   currentTrackTime: null,
 
+  status : function(x){
+    this.listener(x)
+  },
+
+  listener : ()=>{}, // reset this for scraping loading message 
+
   // global methods
 
   outlet: function(data){ 
@@ -245,9 +251,8 @@ LOM.connect = function(){
 
       if (data.type === 'openMessage'){
 
-        console.log(data.value)
-
-        LOM.observeList = {live_settempo: ()=>{}}
+        console.log(data.value) // "conncted to live..."
+        // LOM.observeList = {live_settempo: ()=>{}}
 
         LOM.observe('reset', 'this', 'resetsTheObservers', ()=>{})
 
@@ -372,7 +377,7 @@ LOM.scrape = function(){
 
     for (let j of Object.keys(trackArray)){
 
-      console.log("processing track: ", j, '\n')
+      LOM.status(`processing track: ${j}`)
 
       for (let k of scenes){
           await clipNameGetPromise(trackArray[j].clips, j, k )
@@ -393,20 +398,21 @@ LOM.scrape = function(){
 
     let trackCount = await trackCountPromise();
 
-    console.log('tracks: ', trackCount, '\n')
+    LOM.status(`tracks: ${trackCount}`)
     
     let sceneCount = await sceneCountPromise();
     
-    console.log('scenes: ', sceneCount, '\n')
+    LOM.status(`scenes: ${sceneCount}`)
     
     let trackList = await asyncTrackScrape(trackCount);
     let finalArray = await asyncSceneScrape(trackList, sceneCount)
 
-    console.log("scrapped " + trackCount + " tracks", '\n')
+    LOM.status(`scrapped ${trackCount} tracks`)
+    
     cache['track count'] = trackCount;
     cache['scene count'] = sceneCount;
     cache['scene names'] = sceneArr;
-    console.log(finalArray)
+    
     return finalArray 
 
   }
