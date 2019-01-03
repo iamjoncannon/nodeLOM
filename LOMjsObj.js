@@ -5,6 +5,7 @@ outlets = 2;
 
 // post(LiveAPI("live_set tracks 1 devices 0 parameters 0").set('value', 0)) // parameter 0 enables and disables the device
 
+post(LiveAPI("live_set").info)
 
 //post(LiveAPI("live_set tracks 1 devices 0 parameters 8").set('value', 100)) // parameters 1-8 change the macro values
 
@@ -113,8 +114,8 @@ function obsSet(observer, INpath, INproperty){
 	}
 	else{
 		obsArr[observer].path = INpath; // "live_set master_track mixer_device volume";
-	obsArr[observer].property = INproperty; // "value";
-	obsArr[observer].mode = 1; // prevents assignment from changing if the order of the tracks changes
+		obsArr[observer].property = INproperty; // "value";
+		obsArr[observer].mode = 1; // prevents assignment from changing if the order of the tracks changes
 	}
 	
 }
@@ -122,10 +123,10 @@ function obsSet(observer, INpath, INproperty){
 // zero out any previous observer assignments
 // since they persist in Live after the server is closed
 
-for (var i = 0; i < obsArr.length; i++){
+// for (var i = 0; i < obsArr.length; i++){
 
-	obsSet(i, "live_set", "root_note")
-}
+// 	obsSet(i, "live_set", "root_note")
+// }
 
 function obsReset(){
 
@@ -138,22 +139,7 @@ function obsReset(){
 
 // default observer values:  
 // global transport information:
-// tempo, volume, position, playing, beat quantization
-
-	// master volume // 
-
-// obsSet(0, "live_set master_track mixer_device volume", "value")
-
-	// the beat
-
-// obsSet(1, the beat)
-
-	// playing or not playing
-
-// obsSet(1, "live_set tracks 0 mixer_device volume", "value")
-
-	// the beat quantization
-
+// tempo, volume, position, beat quantization
 
 
 

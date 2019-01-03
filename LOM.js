@@ -455,7 +455,7 @@ LOM.initObs = function(callback){
     LOM.observe(0, "live_set", "is_playing", playingCB)
 
     function mastVolCB(x){
-      callback('master volume: ', x)
+      callback(['master volume: ', x])
     }
 
 
@@ -463,19 +463,19 @@ LOM.initObs = function(callback){
 
 
     function progressCB(x){
-      callback('track time: ', x)
+      callback(['track time: ', Math.round(x)])
     }
 
     LOM.observe(2, "live_set", "current_song_time", progressCB)
 
     function meterCB(x){
-      callback('master track output level: ', x)
+      callback(['master track output level: ', x])
     }
 
     LOM.observe(3, "live_set master_track", "output_meter_level", meterCB)
 
 
-
+    return this
 };
 
 
