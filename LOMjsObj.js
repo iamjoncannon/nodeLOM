@@ -2,17 +2,7 @@
 
 outlets = 2;
 
-
-// post(LiveAPI("live_set tracks 1 devices 0 parameters 0").set('value', 0)) // parameter 0 enables and disables the device
-
-post(LiveAPI("live_set").info)
-
-//post(LiveAPI("live_set tracks 1 devices 0 parameters 8").set('value', 100)) // parameters 1-8 change the macro values
-
-// post(LiveAPI("live_set tracks 2 clip_slots 0 clip").info) // parameters 1-8 change the macro values
-
-// post(LiveAPI("live_set tracks 2").getcount('devices'))
-
+// post(LiveAPI("live_set").info)
 
 // call and set 
 
@@ -74,11 +64,6 @@ observeCB = function(valChange){
 }	
 
 var obs1 = new LiveAPI(observeCB);
-
-// ...yes we are literally going to create 20 instances of this object
-// each observer is its own lil unique object and can't be created any other way
-// if you need more observers feel free to copy and paste, frand
-
 var obs2 = new LiveAPI(observeCB);
 var obs3 = new LiveAPI(observeCB);
 var obs4 = new LiveAPI(observeCB);
@@ -120,13 +105,9 @@ function obsSet(observer, INpath, INproperty){
 	
 }
 
-// zero out any previous observer assignments
-// since they persist in Live after the server is closed
-
-// for (var i = 0; i < obsArr.length; i++){
-
-// 	obsSet(i, "live_set", "root_note")
-// }
+// reset the observers to a value that will never 
+// change- otherwise the callback in the LOM.js lib
+// will throw errors 
 
 function obsReset(){
 
@@ -136,10 +117,3 @@ function obsReset(){
 	}
 
 }
-
-// default observer values:  
-// global transport information:
-// tempo, volume, position, beat quantization
-
-
-

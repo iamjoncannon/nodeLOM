@@ -3,9 +3,6 @@
 this is the node.js max file
 this hosts a socket io server 
 
-the Max API allows node to 
-connect with the JS object
-
 */
 
 // start a socket io server
@@ -26,9 +23,9 @@ io.sockets.on('connection', function (socket) {
 
 	idList.push(socket.id) 
 
-    // this emits only to the socket that just connected
+    // this emits to the socket that just connected
 
-    socket.emit('fromServer', { type: "openMessage", value: `Connected to Ableton Live via socket.io at socket id: ${socket.id}`} ); 
+    socket.emit('fromServer', { type: "openMessage", value: `Connected to Live via socket.io at socket id: ${socket.id}`} ); 
 
     // socket.emit('fromServer', { type: 'id', id: socket.id} ); 
     	// send to the client, will append get and observer requests

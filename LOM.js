@@ -1,19 +1,7 @@
 /*
 
-this is the external library linked to the node max
+external library communicating with the node max
 object via web sockets
-
-this holds the handler function library that are
-exported to the consumer node server
-
-the data output by the handler functions is routed
-through the socket port to the node max object, 
-which then passes the data to the max js object
-that has access to the live api
-
-with get and observer functions, data is also routed
-the other direction to the consumer server from Live
-and exposed to the consumer via specified callbacks
 
 */
 
@@ -21,12 +9,9 @@ const LOM = {
 
   path: 'live_set',
 
-  getList : {}, // basically a bootleg form of Promises-
-                // stores get request callbacks to return once the value is returned from Abe
+  getList : {}, // cache for get requests returned from Live
 
-  observeList : {live_settempo: ()=>{}}, // same as getList but not deleted after the value is returned
-                    // will stream as long as the socket is connected and the 
-                    // observe value is assigned in the LOM interface 
+  observeList : {}, 
 
   // these are global methods
 
@@ -211,7 +196,7 @@ LOM.track = function(num) {
     },
 
     get(value, cb){
-      // console.log(trackPath)
+
       if(trackPath.includes("clip_slots")){
         trackPath += " clip "
       }
@@ -220,7 +205,6 @@ LOM.track = function(num) {
     },
 
     count(value, cb){
-      // console.log(trackPath, value)
       LOM.Get(trackPath, value, cb)
     }
 
@@ -444,18 +428,17 @@ LOM.initObs = function(callback){
 
     //initalize an object that returns the global observe methods as an object
 
-
     function playingCB(x){
       let output
       x === 0 ? output = "Abe is not playing" : output = "Abe is bangin!" ;
       // console.log('\n')
-      callback(output)
+      callback({"playing?" : output})
     }
 
     LOM.observe(0, "live_set", "is_playing", playingCB)
 
     function mastVolCB(x){
-      callback(['master volume: ', x])
+      callback({'master volume': x})
     }
 
 
@@ -463,30 +446,17 @@ LOM.initObs = function(callback){
 
 
     function progressCB(x){
-      callback(['track time: ', Math.round(x)])
+      callback({'track time': x})
     }
 
     LOM.observe(2, "live_set", "current_song_time", progressCB)
 
     function meterCB(x){
-      callback(['master track output level: ', x])
+      callback({'master track output level': x})
     }
 
     LOM.observe(3, "live_set master_track", "output_meter_level", meterCB)
 
 };
 
-
 module.exports = LOM;
-
-// TO DO \\
-
-
-// Fourth
-
-// observe method-
-
-// LOM.track(1).observe("is playing", ( )=> console.log("Track 1 is Playing")).
-
-// suggested observe list/things to use with server funk
-

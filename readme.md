@@ -105,6 +105,29 @@ let myLiveSession = LOM.scrape()
         '1 Frequency A' ] },
 	},
 '12': ...
+ 'scene names':
+   [ ' terraform 011',
+     ' 2',
+     ' 3',
+     ' synth breakdown',
+     ' 5',
+     ' 6',
+     ' 7',
+     ' 8',
+     ' 9',
+     ' 10',
+     ' arnold on mars intro',
+     ' 12',
+     ' 13',
+     ' 14',
+     ' 15',
+     ' 16',
+     ' 17',
+     ' bridge',
+     ' 19',
+     ' 20',
+     ' 21',
+     'beloved']}
 }
 ```
 
@@ -116,13 +139,15 @@ Global transport properties can be streamed continuously to a specified callback
 
 ```Javascript
 LOM.init((x)=>console.log(x))
+
+{ 'playing?': 'Abe is not playing' }
+{ 'master volume': 0.840765237808 }
+{ 'track time': 7.07821617536 }
+{ 'master track output level': 0 }
+
 ```
 
-N.B. the init method utilize observers 1-5, and only 20 observers are available. Tempo cannot be observed.
-
 #### Roll Your Own 
-
-See LOMstructure readme for detailed discussion of how to deal with the Live API
 
 ```Javascript
 LOM.call(path, command) // LOM.call("live_set", "stop_playing")
