@@ -474,8 +474,6 @@ LOM.initObs = function(callback){
 
     LOM.observe(3, "live_set master_track", "output_meter_level", meterCB)
 
-
-    return this
 };
 
 
