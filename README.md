@@ -3,27 +3,42 @@
 
 Leverages the recently added Node.js object in Max For Live to update a previous npm package - "max4node" https://www.npmjs.com/package/max4node - using socket.io instead of the Max UDP object to communicate with an external server. Includes Javascript driver for the Live API.
 
-## Installation:
+## Config:
 
-1. git clone https://github.com/iamjoncannon/nodeLOM
-
-2. install dependencies into subdirectory:
-
-```node
-npm i socket.io
-```
+1. npm install
 
 3. Place LOMcontroller.amxd into Live Session (any track will work)
 
 4. Press 'script start' button in the Max device. This will spin up the socket.io server locally on port 8080.
 
-5. Expose the API:
+5. Expose the API to your Node:
 
 ```Javascript
-const LOM = require("./maxLOM/LOM.js")
+const LOM = require("./LOM.js")
 
-LOM.connect()
+LOM.connect() 
 ```
+
+## Sample Web App:
+
+Spin up the sample server:
+
+```ssh
+node sampleServer.js
+```
+
+This will start the server and open a link to the app in your browser. The external Node process should read:
+
+```BASH
+"Serving {your_localhost_netmask}:5000
+Node in Max says:
+Connected to Live on port 8080
+via socket.io with socket id: vaztsCubDNo12O1lAAAk"
+```
+
+The Max Device should readout something similar. 
+
+Click on the QR link with your cell phone and you can play with your Live set from your phone :). 
 
 ## Usage:
 
@@ -78,11 +93,11 @@ Return a JSON with detailed track information, including all track names, clip n
 
 ```Javascript
 
+// LOM.scrape() method returns a promise
+
 let myLiveSession; 
 
-// LOM.scrape() method returns a promise: 
-
-LOM.scrape().then( (x) => myLiveSession = x; )
+LOM.scrape().then( function(x){myLiveSession = x}; ) 
 
 {...
 '11':

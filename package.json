@@ -6,6 +6,7 @@
   "dependencies": {
     "eslint": "^5.12.1",
     "eslint-config-c74": "^1.0.0",
+    "express": "^4.16.4",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {},
