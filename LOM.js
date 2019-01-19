@@ -115,8 +115,7 @@ LOM.track = function(num) {
 
   let trackPath = this.path + ' tracks ' + num;
 
-
-  // https://medium.com/@jamischarles/how-to-chain-functions-in-javascript-6644d44793fd
+  // s/o: https://medium.com/@jamischarles/how-to-chain-functions-in-javascript-6644d44793fd
 
   let obj = {
 
@@ -129,38 +128,34 @@ LOM.track = function(num) {
     },
 
     solo() {
-      this.path += ' tracks ' + num;
 
       LOM.Set(trackPath, 'solo', true);
 
     },
 
     unsolo() {
-      this.path += ' tracks ' + num;
 
       LOM.Set(trackPath, 'solo', false);
     },
 
     mute() {
-      this.path += ' tracks ' + num;
 
       LOM.Set(trackPath, 'mute', true);
     },
 
     unmute() {
-      this.path += ' tracks ' + num;
 
       LOM.Set(trackPath, 'mute', false);
     },
 
-    vol(num){
-      LOM.Set(trackPath + ' mixer_device volume', 'value', num * 0.0087);
+    vol(numTwo){
+      LOM.Set(trackPath + ' mixer_device volume', 'value', numTwo * 0.0087);
 
       return this;
     },
 
-    pan(num){
-      LOM.Set(trackPath + ' mixer_device panning', 'value', num);
+    pan(numTwo){
+      LOM.Set(trackPath + ' mixer_device panning', 'value', numTwo);
 
       return this;
     },
@@ -171,13 +166,13 @@ LOM.track = function(num) {
 
     }, // "live_set tracks 0 clip_slots 0"
 
-    dev(num) {
-      trackPath += ' devices ' + num;
+    dev(numTwo) {
+      trackPath += ' devices ' + numTwo;
       return this;
     },
 
-    knob(num) {
-      trackPath += ' parameters ' + num;
+    knob(numTwo) {
+      trackPath += ' parameters ' + numTwo;
       return this;
 
     },
@@ -254,15 +249,15 @@ LOM.connect = function(){
       if (data.type === 'openMessage'){
 
         console.log(data.value); // "conncted to live..."
-        // LOM.observeList = {live_settempo: ()=>{}}
+
+        // socket.emit('fromClient', 'Node Server Says: Hello Mars!');
 
         LOM.observe('reset', 'this', 'resetsTheObservers', () => {});
 
         obsOpen = true;
-
       }
 
-      if (data.type == 'id'){
+      if (data.type === 'id'){
 
         LOM.sockID = data.id;
 
@@ -289,8 +284,6 @@ LOM.connect = function(){
 
     });
 
-    // socket.emit('fromClient', "Hello Mars")
-
     LOM.socket = socket;
 
 };
@@ -298,21 +291,21 @@ LOM.connect = function(){
 
 LOM.scrape = function(){
 
-  // async functions to scrape the Live session
+  // async chain to scrape the Live session
 
   let cache = {};
   let sceneArr = [];
 
   function trackCountPromise(){
     return new Promise(resolve => {
-      LOM.count('tracks', (x) => {resolve(x);});
+      LOM.count('tracks', function(x){resolve(x);});
     });
   }
 
   function trackNameGetPromise(num){
     return new Promise(resolve => {
 
-      LOM.track(num).get('name', (x) => resolve( cache[num] = {name: x, clips: [], deviceParams: []} ));
+      LOM.track(num).get('name', function(x){resolve( cache[num] = {name: x, clips: [], deviceParams: []} );});
 
     });
   }
@@ -338,21 +331,21 @@ LOM.scrape = function(){
 
     return new Promise(resolve => {
 
-      LOM.scene(num).get('name', (x) => resolve( sceneArr[num] =  x ));
+      LOM.scene(num).get('name', function(x){resolve( sceneArr[num] =  x );} );
 
     });
   }
 
   function sceneCountPromise(){
     return new Promise(resolve => {
-      LOM.count('scenes', (x) => {resolve(x);});
+      LOM.count('scenes', function(x){resolve(x);} );
     });
   }
 
   function clipNameGetPromise(inputArr, trackNum, clipNum){
       return new Promise(resolve => {
 
-        LOM.track(trackNum).clip(clipNum).get('name', (x) => resolve(inputArr[clipNum] = x));
+        LOM.track(trackNum).clip(clipNum).get('name', function(x){resolve(inputArr[clipNum] = x);} );
 
       });
   }
@@ -361,7 +354,7 @@ LOM.scrape = function(){
       return new Promise(resolve => {
 
         LOM.track(trackNum).dev(0).knob(devNum)
-.get('name', (x) => resolve(inputArr[devNum] = x));
+.get('name', function(x){resolve(inputArr[devNum] = x);} );
 
       });
   }
@@ -422,8 +415,7 @@ LOM.scrape = function(){
   }
 
   return theScrape();
-
-},
+};
 
 
 LOM.initObs = function(callback){
@@ -470,7 +462,6 @@ LOM.initObs = function(callback){
     }
 
     LOM.observe(3, 'live_set master_track', 'output_meter_level', meterCB);
-
 };
 
 module.exports = LOM;

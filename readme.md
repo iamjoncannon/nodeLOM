@@ -78,7 +78,11 @@ Return a JSON with detailed track information, including all track names, clip n
 
 ```Javascript
 
-let myLiveSession = LOM.scrape()
+let myLiveSession; 
+
+// LOM.scrape() method returns a promise: 
+
+LOM.scrape().then( (x) => myLiveSession = x; )
 
 {...
 '11':

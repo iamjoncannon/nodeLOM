@@ -7,13 +7,18 @@ this hosts a socket io server
 
 */
 
+let PORT = 8080;
+
+// ^^^^^^^^^^^^^
+// this is the socket port
+
 // start a socket io server
 
 const Max = require('max-api');
 
 const http = require('http');
 
-const server = http.createServer(function(req, res){});
+const server = http.createServer();
 
 const io = require('socket.io').listen(server);
 
@@ -21,17 +26,17 @@ let idList = [];
 
 io.sockets.on('connection', function (socket) {
 
-    console.log('conncted');
+    Max.outlet('display', `Connected to Live on port ${PORT} \nvia socket.io with socket id: ${socket.id}`);
 
 	idList.push(socket.id);
 
     // this emits to the socket that just connected
 
-    socket.emit('fromServer', { type: 'openMessage', value: `Connected to Live via socket.io at socket id: ${socket.id}`} );
+    socket.emit('fromServer', { type: 'openMessage', value: `Node in Max says:\nConnected to Live on port ${PORT} \nvia socket.io with socket id: ${socket.id}`} );
 
     // socket.emit('fromServer', { type: 'id', id: socket.id} );
-    	// send to the client, will append get and observer requests
-    	// with id tag later
+    // send to the client, next phase of the project will
+    // append get and observer requests with the socket id tag
 
     // client listeners have to be put inside the sever side connection callback
 
@@ -44,14 +49,15 @@ io.sockets.on('connection', function (socket) {
 	});
 
     socket.on('disconnect', function(){
+
+        Max.outlet('display', `Disconnected from External Node on Port ${PORT}`);
+
         Max.outlet('obsSet', 'reset');
     });
 
 });
 
-
-server.listen(8080);
-
+server.listen(PORT);
 
 // handlers for the get and observer relays
 
@@ -62,7 +68,7 @@ Max.addHandler('got', (path, val, result) => {
 });
 
 Max.addHandler('observed', (path, val, result) => {
-    // console.log('observed', path, val, result)
+
 	io.emit('fromServer', { type: 'observed', path: path, prop: val, value: result } );
 
 });

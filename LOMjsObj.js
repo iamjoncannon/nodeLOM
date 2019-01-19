@@ -1,10 +1,9 @@
 /* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 
 // file for the JS max object
 
-outlets = 2;
-
-// post(LiveAPI("live_set").info)
+outlets = 3;
 
 // call and set
 
@@ -24,10 +23,6 @@ function set(path, prop, value){
 
 	LiveAPI(path).set(prop, value);
 
-	// target syntax:
-	// var liveObject = new LiveAPI("live_set");
-	// liveObject.set("tempo", 80);
-
 	// nothing to return - unidirectional
 
 }
@@ -39,8 +34,6 @@ function get(path, prop){
 	outlet(0, path, prop);
 
 	outlet( 1, 'got', path, prop, LiveAPI(path).get(prop) );
-
-	// LiveAPI("live_set master_track mixer_device volume").get("value")
 
 }
 
@@ -92,7 +85,6 @@ obs11, obs12, obs13, obs14, obs15, obs16, obs17, obs18, obs19, obs20];
 function obsSet(observer, INpath, INproperty){
 	post(observer, INpath, INproperty);
 
-
 	if (observer === 'reset'){
 
 		obsReset();
@@ -106,9 +98,14 @@ function obsSet(observer, INpath, INproperty){
 
 }
 
-// reset the observers to a value that will never
-// change- otherwise the callback in the LOM.js lib
-// will throw errors
+/*
+
+reset the observers to a value that will never
+change- otherwise the callback in the LOM.js lib
+will throw errors if Live is running while the server
+restarts
+
+*/
 
 function obsReset(){
 
@@ -116,5 +113,11 @@ function obsReset(){
 
 		obsSet(i, 'live_set', 'root_note');
 	}
+
+}
+
+function display(message){
+
+	outlet(2, message);
 
 }
