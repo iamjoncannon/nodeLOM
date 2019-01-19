@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 /*
 
 external library communicating with the node max
@@ -9,25 +11,25 @@ const LOM = {
 
   path: 'live_set',
 
-  getList : {}, // cache for get requests returned from Live
+  getList: {}, // cache for get requests returned from Live
 
-  observeList : {},
+  observeList: {},
 
   currentTempo: null,
 
   currentTrackTime: null,
 
-  status : function(x){
-    this.listener(x)
+  status: function(x){
+    this.listener(x);
   },
 
-  listener : ()=>{}, // reset this for scraping loading message 
+  listener: () => {}, // reset this for scraping loading message
 
   // global methods
 
-  outlet: function(data){ 
+  outlet: function(data){
 
-    this.socket.emit('fromClient', data)
+    this.socket.emit('fromClient', data);
 
   },
 
@@ -41,20 +43,20 @@ const LOM = {
 
   Get: function(path, prop, cb) {
 
-    this.getList[path+prop] = cb;
+    this.getList[path + prop] = cb;
 
     this.outlet(['get', path, prop]);
   },
 
   count: function(prop, cb, path) {
 
-    if(path){
-      this.getList[path+prop] = cb;
+    if (path){
+      this.getList[path + prop] = cb;
 
       this.outlet(['count', path, prop]);
     }
-    else{
-      this.getList[this.path+prop] = cb;
+    else {
+      this.getList[this.path + prop] = cb;
 
       this.outlet(['count', this.path, prop]);
     }
@@ -63,15 +65,15 @@ const LOM = {
   observe: function(obs, path, prop, cb){
 
     let entry = path + prop;
-    entry = entry.split(' ').join('')
+    entry = entry.split(' ').join('');
 
     this.observeList[entry] = cb;
 
-    this.outlet(['obsSet', obs, path, prop]); 
+    this.outlet(['obsSet', obs, path, prop]);
 
   },
 
-  // transport 
+  // transport
 
   play: function() {
 
@@ -83,7 +85,7 @@ const LOM = {
   },
 
   clear: function() {
-    this.call(this.path, 'stop_all_clips')
+    this.call(this.path, 'stop_all_clips');
   },
 
   resume: function() {
@@ -103,7 +105,7 @@ const LOM = {
   },
 
   get: function(value, cb){
-    LOM.Get(this.path, value, cb)
+    LOM.Get(this.path, value, cb);
   },
 
 };
@@ -112,7 +114,7 @@ const LOM = {
 LOM.track = function(num) {
 
   let trackPath = this.path + ' tracks ' + num;
-  let trackProp;
+
 
   // https://medium.com/@jamischarles/how-to-chain-functions-in-javascript-6644d44793fd
 
@@ -152,72 +154,72 @@ LOM.track = function(num) {
     },
 
     vol(num){
-      LOM.Set(trackPath + " mixer_device volume", "value", num * .0087)
-      
-      return this
+      LOM.Set(trackPath + ' mixer_device volume', 'value', num * 0.0087);
+
+      return this;
     },
 
     pan(num){
-      LOM.Set(trackPath + " mixer_device panning", "value", num)
-      
-      return this
+      LOM.Set(trackPath + ' mixer_device panning', 'value', num);
+
+      return this;
     },
 
     clip(clipNum) {
       trackPath += ' clip_slots ' + clipNum;
-      return this; 
+      return this;
 
     }, // "live_set tracks 0 clip_slots 0"
 
     dev(num) {
-      trackPath += ' devices ' + num
-      return this
+      trackPath += ' devices ' + num;
+      return this;
     },
 
     knob(num) {
-      trackPath += ' parameters ' + num
-      return this
+      trackPath += ' parameters ' + num;
+      return this;
 
     },
 
     on() {
-      trackPath += ' parameters 0 ' 
+      trackPath += ' parameters 0 ';
 
-      LOM.Set(trackPath, 'value', 1)
+      LOM.Set(trackPath, 'value', 1);
 
     },
 
     off() {
-      trackPath += ' parameters 0 ' 
+      trackPath += ' parameters 0 ';
 
-      LOM.Set(trackPath, 'value', 0)
+      LOM.Set(trackPath, 'value', 0);
     },
 
     send(sendNum){
       trackPath += ' mixer_device sends ' + sendNum;
-      return this; 
+      return this;
     },
 
     set(val){
-      LOM.Set(trackPath, 'value', val)
+      LOM.Set(trackPath, 'value', val);
     },
 
     get(value, cb){
 
-      if(trackPath.includes("clip_slots")){
-        trackPath += " clip "
+      if (trackPath.includes('clip_slots')){
+        trackPath += ' clip ';
       }
-      
-      LOM.Get(trackPath, value, cb)
+
+      LOM.Get(trackPath, value, cb);
     },
 
     count(value, cb){
-      LOM.Get(trackPath, value, cb)
+      LOM.Get(trackPath, value, cb);
     }
 
   };
 
-  return obj; 
+  return obj;
 };
 
 
@@ -226,35 +228,35 @@ LOM.scene = function(num) {
   let trackPath = this.path + ' scenes ' + num;
 
   let obj = {
-  
+
     fire() {
       LOM.call(trackPath, 'fire');
     },
 
-    get(value,cb) {
-      LOM.Get(trackPath,value, cb)
+    get(value, cb) {
+      LOM.Get(trackPath, value, cb);
     },
-  
+
   };
 
   return obj;
 };
 
- 
+
 LOM.connect = function(){
 
     const io = require('socket.io-client');
 
-    socket = io.connect('http://localhost:8080'); 
+    socket = io.connect('http://localhost:8080');
 
-    socket.on('fromServer', function(data){ 
+    socket.on('fromServer', function(data){
 
       if (data.type === 'openMessage'){
 
-        console.log(data.value) // "conncted to live..."
+        console.log(data.value); // "conncted to live..."
         // LOM.observeList = {live_settempo: ()=>{}}
 
-        LOM.observe('reset', 'this', 'resetsTheObservers', ()=>{})
+        LOM.observe('reset', 'this', 'resetsTheObservers', () => {});
 
         obsOpen = true;
 
@@ -262,15 +264,15 @@ LOM.connect = function(){
 
       if (data.type == 'id'){
 
-        LOM.sockID = data.id
+        LOM.sockID = data.id;
 
       }
 
-      // handle data returned from Live 
+      // handle data returned from Live
 
       if (data.type === 'got'){
 
-        LOM.getList[data.path + data.prop](data.value) // retreive callback from cache
+        LOM.getList[data.path + data.prop](data.value); // retreive callback from cache
 
         LOM.getList[data.path + data.prop] = null; // reset the cache
 
@@ -278,12 +280,13 @@ LOM.connect = function(){
 
       if (obsOpen && data.type === 'observed' && !(data.prop === 'id')){
 
-        let entry = (data.path + data.prop).replace('"', '').replace('"', '').split(' ').join('')
+        let entry = (data.path + data.prop).replace('"', '').replace('"', '').split(' ')
+.join('');
 
         LOM.observeList[entry](data.value);
 
       }
-    
+
     });
 
     // socket.emit('fromClient', "Hello Mars")
@@ -301,96 +304,97 @@ LOM.scrape = function(){
   let sceneArr = [];
 
   function trackCountPromise(){
-    return new Promise(resolve=>{
-      LOM.count('tracks', (x)=>{resolve(x)})
-    })
+    return new Promise(resolve => {
+      LOM.count('tracks', (x) => {resolve(x);});
+    });
   }
 
   function trackNameGetPromise(num){
-    return new Promise(resolve=>{
+    return new Promise(resolve => {
 
-      LOM.track(num).get('name', (x)=>resolve( cache[num] = {name: x, clips: [], deviceParams: []} ))
+      LOM.track(num).get('name', (x) => resolve( cache[num] = {name: x, clips: [], deviceParams: []} ));
 
-    })
+    });
   }
 
   async function asyncTrackScrape(count){
 
     let list = [];
 
-    for(let i =0; i < count;i++){
-      list.push(i)
+    for (let i = 0; i < count;i++){
+      list.push(i);
     }
 
     for (let j of list){
 
-      await trackNameGetPromise(j)
-    
-    };
-    
+      await trackNameGetPromise(j);
+
+    }
+
     return cache;
   }
 
   function sceneNameGetPromise(num){
 
-    return new Promise(resolve=>{
+    return new Promise(resolve => {
 
-      LOM.scene(num).get('name', (x)=>resolve( sceneArr[num] =  x ))
+      LOM.scene(num).get('name', (x) => resolve( sceneArr[num] =  x ));
 
-    })
+    });
   }
 
   function sceneCountPromise(){
-    return new Promise(resolve=>{
-      LOM.count('scenes', (x)=>{resolve(x)})
-    })
+    return new Promise(resolve => {
+      LOM.count('scenes', (x) => {resolve(x);});
+    });
   }
 
   function clipNameGetPromise(inputArr, trackNum, clipNum){
-      return new Promise(resolve=>{
+      return new Promise(resolve => {
 
-        LOM.track(trackNum).clip(clipNum).get('name', (x)=>resolve(inputArr[clipNum] = x))
-      
-      })
+        LOM.track(trackNum).clip(clipNum).get('name', (x) => resolve(inputArr[clipNum] = x));
+
+      });
   }
 
   function deviceParamsGetPromise(inputArr, trackNum, devNum){
-      return new Promise(resolve=>{
+      return new Promise(resolve => {
 
-        LOM.track(trackNum).dev(0).knob(devNum).get('name', (x)=>resolve(inputArr[devNum] = x))
-      
-      })
+        LOM.track(trackNum).dev(0).knob(devNum)
+.get('name', (x) => resolve(inputArr[devNum] = x));
+
+      });
   }
 
   async function asyncSceneScrape(trackArray, scenesNum){
 
     let scenes = [];
 
-    let devices = [1,2,3,4,5,6]
+    let devices = [1, 2, 3, 4, 5, 6];
 
-    for(let i =0; i < scenesNum; i++){
-      scenes.push(i)
+    for (let i = 0; i < scenesNum; i++){
+      scenes.push(i);
 
-      await sceneNameGetPromise(i)
+      await sceneNameGetPromise(i);
 
     }
 
     for (let j of Object.keys(trackArray)){
 
-      LOM.status(`processing track: ${j}`)
+      LOM.status(`processing track: ${j}`);
 
       for (let k of scenes){
-          await clipNameGetPromise(trackArray[j].clips, j, k )
+          await clipNameGetPromise(trackArray[j].clips, j, k );
       }
 
       for (let L of devices){
 
-          await deviceParamsGetPromise(trackArray[j].deviceParams, j, L)
+          await deviceParamsGetPromise(trackArray[j].deviceParams, j, L);
       }
 
-    
-    };
-    
+
+    }
+
     return trackArray;
   }
 
@@ -398,26 +402,26 @@ LOM.scrape = function(){
 
     let trackCount = await trackCountPromise();
 
-    LOM.status(`tracks: ${trackCount}`)
-    
-    let sceneCount = await sceneCountPromise();
-    
-    LOM.status(`scenes: ${sceneCount}`)
-    
-    let trackList = await asyncTrackScrape(trackCount);
-    let finalArray = await asyncSceneScrape(trackList, sceneCount)
+    LOM.status(`tracks: ${trackCount}`);
 
-    LOM.status(`scrapped ${trackCount} tracks`)
-    
+    let sceneCount = await sceneCountPromise();
+
+    LOM.status(`scenes: ${sceneCount}`);
+
+    let trackList = await asyncTrackScrape(trackCount);
+    let finalArray = await asyncSceneScrape(trackList, sceneCount);
+
+    LOM.status(`scrapped ${trackCount} tracks`);
+
     cache['track count'] = trackCount;
     cache['scene count'] = sceneCount;
     cache['scene names'] = sceneArr;
-    
-    return finalArray 
+
+    return finalArray;
 
   }
 
-  return theScrape() 
+  return theScrape();
 
 },
 
@@ -425,47 +429,47 @@ LOM.scrape = function(){
 LOM.initObs = function(callback){
 
     function tempoCB(x){
-      LOM.currentTempo = x
-      callback({'current tempo' : x})
+      LOM.currentTempo = x;
+      callback({'current tempo': x});
     }
 
-    LOM.observe(5, "live_set", "tempo", tempoCB)
+    LOM.observe(5, 'live_set', 'tempo', tempoCB);
 
     function playingCB(x){
-      let output
-      x === 0 ? output = "Abe is not playing" : output = "Abe is bangin!" ;
+      let output;
+      x === 0 ? output = 'Abe is not playing' : output = 'Abe is bangin!' ;
       // console.log('\n')
-      callback({"playing?" : output})
+      callback({'playing?': output});
     }
 
-    LOM.observe(0, "live_set", "is_playing", playingCB)
+    LOM.observe(0, 'live_set', 'is_playing', playingCB);
 
     function mastVolCB(x){
-      callback({'master volume fader': x})
+      callback({'master volume fader': x});
     }
 
-    LOM.observe(1, "live_set master_track mixer_device volume", "value", mastVolCB)
+    LOM.observe(1, 'live_set master_track mixer_device volume', 'value', mastVolCB);
 
     function beatPosition(time){
 
-      return [Math.round(time % LOM.currentTempo)]
+      return [Math.round(time % LOM.currentTempo)];
 
     }
 
     function progressCB(x){
       LOM.currentTrackTime = x;
-      callback({'track time': x})
-      callback({'beat position': beatPosition(LOM.currentTrackTime) })
+      callback({'track time': x});
+      callback({'beat position': beatPosition(LOM.currentTrackTime) });
 
     }
 
-    LOM.observe(2, "live_set", "current_song_time", progressCB)
+    LOM.observe(2, 'live_set', 'current_song_time', progressCB);
 
     function meterCB(x){
-      callback({'master track output level': x})
+      callback({'master track output level': x});
     }
 
-    LOM.observe(3, "live_set master_track", "output_meter_level", meterCB)
+    LOM.observe(3, 'live_set master_track', 'output_meter_level', meterCB);
 
 };
 
