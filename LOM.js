@@ -430,7 +430,7 @@ LOM.initObs = function(callback){
     function playingCB(x){
       let output;
       x === 0 ? output = 'Abe is not playing' : output = 'Abe is bangin!' ;
-      // console.log('\n')
+
       callback({'playing?': output});
     }
 
