@@ -26,7 +26,7 @@ let idList = [];
 
 io.sockets.on('connection', function (socket) {
 
-    Max.outlet('display', `Connected to Live on port ${PORT} \nvia socket.io with socket id: ${socket.id}`);
+    Max.outlet('display', `I'm talking to Live, and we're connected on port ${PORT} \nvia socket.io with socket id: ${socket.id}`);
 
 	idList.push(socket.id);
 

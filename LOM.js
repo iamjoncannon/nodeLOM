@@ -279,9 +279,7 @@ LOM.connect = function(){
 .join('');
 
         LOM.observeList[entry](data.value);
-
       }
-
     });
 
     LOM.socket = socket;
