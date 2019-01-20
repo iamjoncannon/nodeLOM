@@ -29,7 +29,7 @@ const LOM = {
 
   outlet: function(data){
 
-    this.socket.emit('fromClient', data);
+    this.socket.emit('fromLib', data);
 
   },
 
@@ -84,7 +84,7 @@ const LOM = {
     this.call(this.path, 'stop_playing');
   },
 
-  clear: function() {
+  stopClips: function() {
     this.call(this.path, 'stop_all_clips');
   },
 
@@ -242,15 +242,15 @@ LOM.connect = function(){
 
     const io = require('socket.io-client');
 
-    socket = io.connect('http://localhost:8080');
+    socket = io.connect('http://localhost:9000');
 
-    socket.on('fromServer', function(data){
+    socket.on('fromMax', function(data){
 
       if (data.type === 'openMessage'){
 
         console.log(data.value); // "conncted to live..."
 
-        // socket.emit('fromClient', 'Node Server Says: Hello Mars!');
+        // socket.emit('fromLib', 'Node Server Says: Hello Mars!');
 
         LOM.observe('reset', 'this', 'resetsTheObservers', () => {});
 

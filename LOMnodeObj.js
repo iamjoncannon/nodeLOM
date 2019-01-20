@@ -7,7 +7,7 @@ this hosts a socket io server
 
 */
 
-let PORT = 8080;
+let PORT = 9000;
 
 // ^^^^^^^^^^^^^
 // this is the socket port
@@ -32,9 +32,9 @@ io.sockets.on('connection', function (socket) {
 
     // this emits to the socket that just connected
 
-    socket.emit('fromServer', { type: 'openMessage', value: `Node in Max says:\nConnected to Live on port ${PORT} \nvia socket.io with socket id: ${socket.id}`} );
+    socket.emit('fromMax', { type: 'openMessage', value: `Node in Max says:\nConnected to Live on port ${PORT} \nvia socket.io with socket id: ${socket.id}`} );
 
-    // socket.emit('fromServer', { type: 'id', id: socket.id} );
+    // socket.emit('fromMax', { type: 'id', id: socket.id} );
     // send to the client, next phase of the project will
     // append get and observer requests with the socket id tag
 
@@ -42,7 +42,7 @@ io.sockets.on('connection', function (socket) {
 
     // simply relaying the data into the Max JS object
 
-    socket.on('fromClient', function(data2){
+    socket.on('fromLib', function(data2){
 
 		Max.outlet(data2);
 
@@ -63,13 +63,13 @@ server.listen(PORT);
 
 Max.addHandler('got', (path, val, result) => {
 
-	io.emit('fromServer', { type: 'got', path: path, prop: val, value: result } );
+	io.emit('fromMax', { type: 'got', path: path, prop: val, value: result } );
 
 });
 
 Max.addHandler('observed', (path, val, result) => {
 
-	io.emit('fromServer', { type: 'observed', path: path, prop: val, value: result } );
+	io.emit('fromMax', { type: 'observed', path: path, prop: val, value: result } );
 
 });
 

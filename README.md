@@ -1,7 +1,7 @@
 
 # nodeLOM- Live API <-> socket.io 
 
-Leverages the recently added Node.js object in Max For Live to update a previous npm package - "max4node" https://www.npmjs.com/package/max4node - using socket.io instead of the Max UDP object to communicate with an external server. Includes Javascript driver for the Live API.
+Leverages the recently added Node.js object in Max For Live to update a previous npm package - "max4node" https://www.npmjs.com/package/max4node - using socket.io instead of the Max UDP object to communicate with an external server. Includes an extensive Javascript driver for the Live API.
 
 ## Config:
 
@@ -11,7 +11,7 @@ Leverages the recently added Node.js object in Max For Live to update a previous
 
 4. Press 'script start' button in the Max device. This will spin up the socket.io server locally on port 8080.
 
-5. Expose the API to your Node:
+5. Expose the API to your Node process:
 
 ```Javascript
 const LOM = require("./LOM.js")
@@ -21,10 +21,10 @@ LOM.connect()
 
 ## Sample Web App:
 
-Spin up the sample server:
+Spin up the sample server in your CLI:
 
 ```ssh
-node sampleServer.js
+nodeLOM$ node sampleServer.js
 ```
 
 This will start the server and open a link to the app in your browser. The external Node process should read:
@@ -47,6 +47,7 @@ Click on the QR link with your cell phone and you can play with your Live set fr
 ```Javascript
 LOM.play()
 LOM.stop()
+LOM.stopClips()
 LOM.resume() 
 LOM.tempo.set(120)
 LOM.bquant.set(4)  // 0 = none, 1 = 8 bars, 2 = 4 bars, 3 = 2 bars, 4 = 1 bar
